@@ -1,0 +1,59 @@
+[package]
+name = "mt-note-mobile"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+dioxus = { workspace = true, features = ["router", "asset"] }
+manganis = { workspace = true }
+ui = { workspace = true }
+stylance = { workspace = true }
+js-bridge-bindgen = { workspace = true }
+jni = { workspace = true, features = ["invocation"] }
+ndk-context.workspace = true
+tracing-subscriber = { version = "0.3", default-features = false, features = [
+    "registry",
+] }
+thiserror.workspace = true
+models.workspace = true
+persist.workspace = true
+mt-note-fs-engine.workspace = true
+mt-note-typst-engine.workspace = true
+dirs.workspace = true
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+getset.workspace = true
+urlencoding.workspace = true
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "sync"] }
+kameo = { workspace = true }
+futures = { version = "0.3", default-features = false, features = ["std"] }
+mt-note-editor-lsp = { workspace = true }
+pulldown-cmark.workspace = true
+const_format = "0.2.36"
+base64 = { version = "0.22.1", features = ["alloc"] }
+regex = "1.12.4"
+notify = "8.0"
+dioxus-i18n = { workspace = true }
+fluent-langneg = "0.14.2"
+
+[target.'cfg(target_os = "android")'.dependencies]
+tracing-android = "0.2.0"
+
+[build-dependencies]
+stylance-cli = { workspace = true }
+js-bridge-bindgen = { workspace = true }
+
+[package.metadata.stylance]
+output_file = "./assets/styles/dist/bundle-mobile.scss"
+scss_prelude = '''
+@use "../theme";
+@use "../variables" as *;
+'''
+
+[features]
+default = ["mobile"]
+mobile = ["dioxus/mobile"]
+
+[package.metadata.cargo-machete]
+ignored = ["stylance-cli"]

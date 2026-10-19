@@ -1,0 +1,11 @@
+#![forbid(
+    unused_must_use,
+    clippy::panic,
+    clippy::let_underscore_must_use,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::disallowed_types,
+    clippy::disallowed_methods,
+    clippy::allow_attributes,
+    unfulfilled_lint_expectations,
+)]

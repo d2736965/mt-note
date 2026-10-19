@@ -1,0 +1,105 @@
+.result_item {
+    border-bottom: 1px solid var(--md-outline-variant);
+    display: flex;
+    align-items: center;
+    gap: $md-space-sm;
+    padding: $md-space-sm $md-space-lg;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--md-on-surface);
+
+    &:active {
+        background: var(--md-surface-variant);
+    }
+
+    .entry_icon {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+    }
+
+    .entry_info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: $md-space-xs;
+        min-width: 0;
+
+        .entry_name_wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        .entry_name {
+            font-size: $md-font-body-md;
+            color: var(--md-on-surface);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .entry_meta_wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        .entry_meta {
+            font-size: $md-font-body-sm;
+            color: var(--md-on-surface-variant);
+            font-weight: 400;
+            white-space: nowrap;
+        }
+
+        .expand_btn {
+            align-self: flex-start;
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            font-size: $md-font-body-sm;
+            cursor: pointer;
+            padding: 0 $md-space-xs;
+        }
+    }
+
+    .match_lines {
+        background: var(--md-surface-container-low);
+
+        .match_line {
+            display: flex;
+            gap: $md-space-sm;
+            padding: $md-space-xs $md-space-lg;
+            padding-left: $md-space-xxl;
+            font-size: $md-font-body-sm;
+            border-top: 1px solid var(--md-outline-variant);
+
+            .line_num {
+                color: var(--md-on-surface-variant);
+                font-family: monospace;
+                min-width: 32px;
+                flex-shrink: 0;
+            }
+
+            .line_preview {
+                color: var(--md-on-surface);
+                font-family: monospace;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+}

@@ -1,0 +1,132 @@
+@mixin icon-btn-base($color) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $md-appbar-icon-btn-size;
+  height: $md-appbar-icon-btn-size;
+  border: none;
+  background: transparent;
+  border-radius: $md-radius-full;
+  cursor: pointer;
+  color: $color;
+  transition: background-color $md-duration-short $md-easing-standard;
+
+  // hover 反馈只给有真实悬停指针的设备：触摸 WebView 手指抬起后 hover
+  // 态会粘在触点下的按钮上（如编辑切换后同位置的眼睛键一直像被点过）
+  @media (hover: hover) {
+    &:hover {
+      background-color: rgba(var(--md-on-surface-rgb), 0.08);
+    }
+  }
+
+  &:active {
+    background-color: rgba(var(--md-on-surface-rgb), 0.12);
+  }
+
+  svg {
+    width: $md-appbar-icon-size;
+    height: $md-appbar-icon-size;
+    fill: currentColor;
+  }
+}
+
+.top_app_bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--md-appbar-height) + env(safe-area-inset-top));
+  padding-left: $md-appbar-horizontal-padding;
+  padding-right: $md-appbar-horizontal-padding;
+  padding-top: env(safe-area-inset-top);
+  background-color: var(--md-surface-container);
+  z-index: 100;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+
+  .leading {
+    @include icon-btn-base(var(--md-on-surface));
+    flex-shrink: 0;
+    min-width: $md-appbar-icon-btn-size;
+  }
+
+  .headline {
+    flex: 1;
+    font-size: $md-font-title-lg;
+    font-weight: $md-weight-regular;
+    color: var(--md-on-surface);
+    margin: 0;
+    padding-left: $md-space-sm;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 0;
+    transition: color 0.3s ease;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .trailing {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 0;
+    gap: $md-space-xs;
+
+    .trailing-btn {
+      @include icon-btn-base(var(--md-on-surface-variant));
+
+      &.trailing-btn-active {
+        color: var(--md-primary);
+        background-color: rgba(var(--md-primary-rgb), 0.12);
+      }
+
+      &.trailing-btn-menu {
+        &:hover,
+        &:active {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+  &.searching {
+    .search-field {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: $md-space-sm;
+      margin-left: $md-space-sm;
+      min-width: 0;
+
+      svg {
+        width: $md-appbar-icon-size;
+        height: $md-appbar-icon-size;
+        fill: var(--md-on-surface-variant);
+        flex-shrink: 0;
+        transition: fill 0.3s ease;
+      }
+
+      input {
+        flex: 1;
+        min-width: 0;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: $md-font-title-md;
+        color: var(--md-on-surface);
+        padding: 0;
+        transition: color 0.3s ease;
+
+        &::placeholder {
+          color: var(--md-on-surface-variant);
+        }
+      }
+    }
+  }
+}

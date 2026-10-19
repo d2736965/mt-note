@@ -1,0 +1,57 @@
+.navbar {
+  // 共同外壳（spec §3）
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--md-bottom-appbar-height);
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: var(--md-surface-container);
+  z-index: 100;
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+
+  .item {                   // 目的地，嵌套在 .navbar 内（SCSS 嵌套规范）
+    flex: 1;                // 均分
+    min-width: 0;
+    display: flex;
+    flex-direction: column; // 上 icon / 下 label
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 2px 0;
+    color: var(--md-on-surface-variant);
+    transition: color $md-duration-short $md-easing-standard;
+
+    .icon-pill {            // icon 容器（无背景药丸；激活态由 .item 的 color 着色 svg）
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 28px;
+
+      svg {
+        width: $md-appbar-icon-size;
+        height: $md-appbar-icon-size;
+        fill: currentColor;
+      }
+    }
+
+    .label {
+      font-size: $md-font-label-md;
+      line-height: 1;
+    }
+
+    &.active {
+      color: var(--md-primary);   // 激活：icon（svg fill currentColor）+ label 着色为 primary（响应主题，固定值）
+      .label {
+        font-weight: $md-weight-medium;
+      }
+    }
+  }
+}

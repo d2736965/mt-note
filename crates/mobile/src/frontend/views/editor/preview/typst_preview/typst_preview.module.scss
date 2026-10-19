@@ -1,0 +1,114 @@
+.preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: auto;
+  position: relative;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+
+  .zoom_container {
+    display: block;
+    position: relative;
+    color: var(--md-on-surface-variant);
+    font-size: $md-font-body-lg;
+    will-change: transform;
+
+    :global(.page-num-label) {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--md-surface-container-high);
+      color: var(--md-on-surface);
+      font-size: $md-font-body-sm;
+      padding: 2px 8px;
+      border-radius: 8px;
+      z-index: 10;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+
+      &:global(.page-num-hidden) {
+        opacity: 0;
+      }
+    }
+  }
+
+  .preview_error {
+    padding: $md-space-md;
+    background: var(--md-error-container);
+    color: var(--md-on-error-container);
+    font-size: $md-font-body-sm;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .preview_loading {
+    padding: $md-space-md;
+    color: var(--md-on-surface-variant);
+    font-size: $md-font-body-lg;
+  }
+
+  .typst_output {
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    :global(.typst-page) {
+      margin-bottom: $md-space-xs;
+    }
+  }
+
+  .text_layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+
+    :global(.text-layer) {
+      position: relative;
+
+      span {
+        color: transparent;
+        pointer-events: auto;
+        user-select: text;
+        -webkit-user-select: text;
+        white-space: pre;
+        line-height: 1;
+        // Rust 侧内联 font-family 覆盖为 typst 运行时命中字体的子集
+        // @font-face（与 svg 同字体，字形与选区高亮一并归齐）；
+        // 此处 sans-serif 仅作内联缺失时的后备。
+        font-family: sans-serif;
+
+        &::selection {
+          background: rgba(125, 185, 222, 0.63);
+          color: transparent;
+        }
+
+        &::-moz-selection {
+          background: rgba(125, 185, 222, 0.63);
+          color: transparent;
+        }
+      }
+    }
+
+    :global(.typst-text-page) {
+      margin-bottom: $md-space-xs;
+    }
+  }
+}
+
+:global([class*="theme-dark"]) {
+  .preview {
+    .typst_output svg {
+      filter: invert(1);
+    }
+  }
+}

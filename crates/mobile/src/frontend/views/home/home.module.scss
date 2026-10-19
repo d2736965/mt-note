@@ -1,0 +1,78 @@
+.home_view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--md-paper);
+
+  .input_dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $md-space-md;
+
+    .dialog_card {
+      background: var(--md-surface);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      padding: $md-space-lg;
+      display: flex;
+      flex-direction: column;
+      gap: $md-space-md;
+
+      .dialog_title {
+        font-size: $md-font-title-md;
+        font-weight: 600;
+        color: var(--md-on-surface);
+      }
+
+      .dialog_input {
+        padding: $md-space-sm;
+        font-size: $md-font-body-md;
+        color: var(--md-on-surface);
+        background: var(--md-surface-variant);
+        border: 1px solid var(--md-outline);
+        border-radius: 8px;
+
+        &:focus {
+          outline: none;
+          border-color: var(--md-primary);
+        }
+      }
+
+      .dialog_actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: $md-space-sm;
+
+        .btn {
+          padding: $md-space-sm $md-space-lg;
+          font-size: $md-font-body-md;
+          font-weight: 500;
+          border: none;
+          border-radius: 20px;
+          cursor: pointer;
+
+          &.btn_cancel {
+            background: var(--md-surface-variant);
+            color: var(--md-on-surface);
+          }
+
+          &.btn_ok {
+            background: var(--md-primary);
+            color: var(--md-on-primary);
+
+            &:active {
+              opacity: 0.85;
+            }
+          }
+        }
+      }
+    }
+  }
+}

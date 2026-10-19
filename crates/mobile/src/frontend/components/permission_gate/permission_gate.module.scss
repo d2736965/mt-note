@@ -1,0 +1,93 @@
+.gate_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: $md-space-lg;
+  background-color: var(--md-surface);
+}
+
+.gate_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $md-space-md;
+  max-width: 320px;
+  text-align: center;
+}
+
+.gate_icon {
+  width: 48px;
+  height: 48px;
+  color: var(--md-primary);
+}
+
+.gate_checking {
+  color: var(--md-on-surface-variant);
+  font-size: 14px;
+}
+
+.gate_title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--md-on-surface);
+}
+
+.gate_desc {
+  margin: 0;
+  font-size: 14px;
+  color: var(--md-on-surface-variant);
+  line-height: 1.5;
+}
+
+.gate_hint {
+  display: flex;
+  align-items: flex-start;
+  gap: $md-space-xs;
+  padding: $md-space-sm;
+  border-radius: 12px;
+  background-color: var(--md-surface-container-high);
+  font-size: 13px;
+  color: var(--md-on-surface-variant);
+  text-align: left;
+  line-height: 1.5;
+}
+
+.gate_hint_icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--md-primary);
+  margin-top: 1px;
+}
+
+.gate_button {
+  padding: $md-space-sm $md-space-lg;
+  border: none;
+  border-radius: 20px;
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:active {
+    background-color: rgba(var(--md-primary-rgb), 0.88);
+  }
+}
+
+.gate_retry {
+  padding: $md-space-xs $md-space-md;
+  border: none;
+  border-radius: 20px;
+  background-color: transparent;
+  color: var(--md-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:active {
+    background-color: rgba(var(--md-primary-rgb), 0.12);
+  }
+}

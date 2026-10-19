@@ -1,0 +1,75 @@
+// 新建文件/目录对话框卡片样式。
+// 遮罩由公共 Overlay 组件负责，卡片是 Overlay 的兄弟节点，
+// 需要自己绝对定位 + 居中。
+
+.dialog_card {
+  position: fixed;
+  // 略高于 Overlay 遮罩（Overlay 默认 z-index 较低），确保卡片在遮罩之上
+  z-index: 1100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 400px;
+  padding: $md-space-lg;
+  background: var(--md-surface);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: $md-space-md;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  .dialog_title {
+    font-size: $md-font-title-md;
+    font-weight: 600;
+    color: var(--md-on-surface);
+  }
+
+  .dialog_input {
+    padding: $md-space-sm;
+    font-size: $md-font-body-md;
+    color: var(--md-on-surface);
+    background: var(--md-surface-variant);
+    border: 1px solid var(--md-outline);
+    border-radius: 8px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--md-primary);
+    }
+  }
+
+  .dialog_error {
+    font-size: $md-font-body-sm;
+    color: var(--md-error);
+  }
+
+  .dialog_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $md-space-sm;
+
+    .btn {
+      padding: $md-space-sm $md-space-lg;
+      font-size: $md-font-body-md;
+      font-weight: 500;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+
+      &.btn_cancel {
+        background: var(--md-surface-variant);
+        color: var(--md-on-surface);
+      }
+
+      &.btn_ok {
+        background: var(--md-primary);
+        color: var(--md-on-primary);
+
+        &:active {
+          opacity: 0.85;
+        }
+      }
+    }
+  }
+}

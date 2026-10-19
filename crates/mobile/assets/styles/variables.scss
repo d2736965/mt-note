@@ -1,0 +1,149 @@
+// Material 3 色彩体系 — 基于默认 baseline 主题（亮色）
+$md-primary: #6750a4;
+$md-on-primary: #ffffff;
+$md-primary-container: #eaddff;
+$md-on-primary-container: #21005d;
+
+$md-secondary: #625b71;
+$md-on-secondary: #ffffff;
+$md-secondary-container: #e8def8;
+$md-on-secondary-container: #1d192b;
+
+$md-tertiary: #7d5260;
+$md-on-tertiary: #ffffff;
+$md-tertiary-container: #ffd8e4;
+$md-on-tertiary-container: #31111d;
+
+$md-error: #b3261e;
+$md-on-error: #ffffff;
+$md-error-container: #f9dedc;
+$md-on-error-container: #410e0b;
+
+$md-surface: #fef7ff;
+$md-on-surface: #1d1b20;
+$md-surface-variant: #e7e0ec;
+$md-on-surface-variant: #49454f;
+$md-surface-container-lowest: #ffffff;
+$md-surface-container-low: #f7f2fa;
+$md-surface-container: #f3edf7;
+$md-surface-container-high: #ece6f0;
+$md-surface-container-highest: #e6e0e9;
+$md-inverse-surface: #322f35;
+$md-inverse-on-surface: #f5eff7;
+
+$md-paper: #f7f4ed;
+
+// Markdown 渲染背景色体系 — 纯中性灰，无紫红色调
+$md-code-bg: #e0e0e0;       // 代码块/行内代码/表头
+$md-code-bg-deep: #cccccc;  // 表格标题栏/按钮hover
+$md-code-bg-light: #e8e8e8; // 表格偶数行/引用块/mermaid
+$md-dark-code-bg: #2b2930;
+$md-dark-code-bg-deep: #3a3840;
+$md-dark-code-bg-light: #2a2830;
+
+$md-outline: #79747e;
+$md-outline-variant: #cac4d0;
+
+// Material 3 色彩体系 — 暗色主题
+$md-dark-primary: #d0bcff;
+$md-dark-on-primary: #381e72;
+$md-dark-primary-container: #4f378b;
+$md-dark-on-primary-container: #eaddff;
+
+$md-dark-secondary: #ccc2dc;
+$md-dark-on-secondary: #332d41;
+$md-dark-secondary-container: #4a4458;
+$md-dark-on-secondary-container: #e8def8;
+
+$md-dark-tertiary: #efb8c8;
+$md-dark-on-tertiary: #492532;
+$md-dark-tertiary-container: #633b48;
+$md-dark-on-tertiary-container: #ffd8e4;
+
+$md-dark-error: #f2b8b5;
+$md-dark-on-error: #601410;
+$md-dark-error-container: #8c1d18;
+$md-dark-on-error-container: #f9dedc;
+
+$md-dark-surface: #141218;
+$md-dark-on-surface: #e6e0e9;
+$md-dark-surface-variant: #49454f;
+$md-dark-on-surface-variant: #cac4d0;
+$md-dark-surface-container-lowest: #0f0d13;
+$md-dark-surface-container-low: #1d1b20;
+$md-dark-surface-container: #211f26;
+$md-dark-surface-container-high: #2b2930;
+$md-dark-surface-container-highest: #36343b;
+$md-dark-inverse-surface: #e6e0e9;
+$md-dark-inverse-on-surface: #322f35;
+
+$md-dark-paper: #141218;
+
+$md-dark-outline: #938f99;
+$md-dark-outline-variant: #49454f;
+
+// 间距
+$md-space-xxs: 2px;
+$md-space-xs: 4px;
+$md-space-sm: 8px;
+$md-space-md: 12px;
+$md-space-lg: 16px;
+$md-space-xl: 24px;
+$md-space-xxl: 32px;
+
+// 圆角
+$md-radius-xxs: 2px;
+$md-radius-xs: 4px;
+$md-radius-sm: 8px;
+$md-radius-md: 12px;
+$md-radius-lg: 16px;
+$md-radius-xl: 28px;
+$md-radius-full: 9999px;
+
+// 字号
+$md-font-display-lg: 57px;
+$md-font-display-md: 45px;
+$md-font-display-sm: 36px;
+$md-font-headline-lg: 32px;
+$md-font-headline-md: 28px;
+$md-font-headline-sm: 24px;
+$md-font-title-lg: 22px;
+$md-font-title-md: 16px;
+$md-font-title-sm: 14px;
+$md-font-body-lg: 16px;
+$md-font-body-md: 14px;
+$md-font-body-sm: 12px;
+$md-font-body-xs: 10px;
+$md-font-label-lg: 14px;
+$md-font-label-md: 12px;
+$md-font-label-sm: 11px;
+
+// Markdown 标题字号（独立于 M3 体系，确保各级标题视觉区分明显）
+$md-heading-h1: 28px;
+$md-heading-h2: 24px;
+$md-heading-h3: 20px;
+$md-heading-h4: 18px;
+$md-heading-h5: 16px;
+$md-heading-h6: 14px;
+
+// 字重
+$md-weight-regular: 400;
+$md-weight-medium: 500;
+$md-weight-bold: 700;
+
+// 阴影（M3 elevation 1-2）
+$md-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+$md-elevation-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
+$md-elevation-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
+
+// 动画
+$md-duration-short: 150ms;
+$md-duration-medium: 300ms;
+$md-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+// M3 AppBar 尺寸 token
+$md-appbar-height: 64px;
+$md-bottom-appbar-height: 48px;
+$md-appbar-icon-size: 24px;
+$md-appbar-icon-btn-size: 48px;
+$md-appbar-horizontal-padding: 4px;

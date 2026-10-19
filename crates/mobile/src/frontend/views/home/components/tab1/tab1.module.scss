@@ -1,0 +1,93 @@
+.error_banner {
+    padding: $md-space-sm $md-space-md;
+    background: var(--md-error-container);
+    color: var(--md-on-error-container);
+    font-size: $md-font-body-sm;
+}
+
+.breadcrumb_bar {
+    display: flex;
+    align-items: center;
+    padding: $md-space-xs $md-space-md;
+    gap: 2px;
+    border-bottom: 1px solid var(--md-outline-variant);
+    background: var(--md-surface-container);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .breadcrumb_root {
+        background: transparent;
+        border: none;
+        color: var(--md-primary);
+        padding: $md-space-xs;
+        border-radius: $md-radius-xs;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+        &:active {
+            background: var(--md-primary-container);
+        }
+    }
+
+    .breadcrumb_sep {
+        color: var(--md-on-surface-variant);
+        font-size: $md-font-body-sm;
+        flex-shrink: 0;
+    }
+
+    .breadcrumb_btn {
+        background: transparent;
+        border: none;
+        color: var(--md-primary);
+        padding: $md-space-xs;
+        border-radius: $md-radius-xs;
+        cursor: pointer;
+        font-size: $md-font-body-sm;
+        white-space: nowrap;
+        flex-shrink: 0;
+
+        &:active {
+            background: var(--md-primary-container);
+        }
+    }
+
+    .breadcrumb_current {
+        color: var(--md-on-surface);
+        font-size: $md-font-body-sm;
+        font-weight: $md-weight-medium;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+
+.entry_list {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.empty_state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $md-space-xl;
+    gap: $md-space-md;
+    color: var(--md-on-surface-variant);
+
+    .empty_icon {
+        font-size: 48px;
+        opacity: 0.5;
+    }
+
+    .empty_text {
+        font-size: $md-font-body-lg;
+    }
+}

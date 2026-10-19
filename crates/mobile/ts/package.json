@@ -1,0 +1,28 @@
+{
+    "name": "mt-note-mobile-ts",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "typecheck": "tsgo --noEmit",
+        "lint": "oxlint src/",
+        "lint:fix": "oxlint --fix src/",
+        "format": "prettier --write src/",
+        "format:check": "prettier --check src/"
+    },
+    "devDependencies": {
+        "@types/katex": "^0.16.8",
+        "@typescript/native-preview": "7.0.0-dev.20260707.2",
+        "esbuild": "^0.25.0",
+        "oxlint": "^1.73.0",
+        "prettier": "^3.9.5",
+        "vite": "^8.1.4"
+    },
+    "dependencies": {
+        "@fluent/bundle": "^0.19.1",
+        "highlight.js": "^11.11.1",
+        "katex": "^0.18.2",
+        "mermaid": "^11.17.2",
+        "pdfjs-dist": "^6.4.299"
+    }
+}

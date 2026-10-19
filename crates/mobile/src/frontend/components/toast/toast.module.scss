@@ -1,0 +1,25 @@
+.host {
+  position: fixed;
+  bottom: 45%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $md-space-xs;
+  pointer-events: none;
+
+  .item {
+    padding: $md-space-sm $md-space-lg;
+    background: rgba(50, 50, 50, 0.85);
+    color: #f0f0f0;
+    font-size: $md-font-body-sm;
+    border-radius: $md-radius-sm;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: auto;
+  }
+}

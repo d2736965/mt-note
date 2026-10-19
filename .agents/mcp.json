@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "cdp-local": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--no-usage-statistics"
+      ],
+      "env": {}
+    },
+    "cdp-remote": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--browser-url=http://127.0.0.1:9228",
+        "--no-usage-statistics"
+      ],
+      "env": {}
+    }
+  }
+}

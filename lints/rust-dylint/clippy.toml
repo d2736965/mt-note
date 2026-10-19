@@ -1,0 +1,4 @@
+# 测试中允许使用 unwrap/expect/panic
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true

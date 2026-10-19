@@ -1,0 +1,6 @@
+// HighlightedLine 组件样式。
+// 诊断高亮样式（diag_error / diag_warning / diag_info / diag_hint）在
+// code_editor.module.scss 中定义，通过 super::styles 共享。
+.highlighted_line {
+  display: contents;
+}

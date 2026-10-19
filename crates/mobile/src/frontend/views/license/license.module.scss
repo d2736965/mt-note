@@ -1,0 +1,45 @@
+.license_view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: $md-space-md;
+  gap: $md-space-md;
+  overflow-y: auto;
+
+  .kind_switcher {
+    display: flex;
+    gap: $md-space-xs;
+    background-color: var(--md-surface-variant);
+    padding: $md-space-xs;
+    border-radius: $md-radius-full;
+    align-self: center;
+    transition: background-color 0.3s ease;
+
+    .kind_btn {
+      padding: $md-space-xs $md-space-md;
+      border: none;
+      background: transparent;
+      border-radius: $md-radius-full;
+      font-size: $md-font-body-sm;
+      color: var(--md-on-surface-variant);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &.active {
+        background-color: var(--md-primary);
+        color: var(--md-on-primary);
+      }
+    }
+  }
+
+  .license_text {
+    margin: 0;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: $md-font-body-sm;
+    line-height: 1.5;
+    color: var(--md-on-surface);
+    white-space: pre-wrap;
+    word-break: break-word;
+    user-select: text;
+  }
+}

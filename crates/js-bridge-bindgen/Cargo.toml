@@ -1,0 +1,23 @@
+[package]
+name = "js-bridge-bindgen"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "从 TypeScript 源码自动生成 Rust 类型安全绑定代码"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/user/js-bridge-bindgen"
+keywords = ["typescript", "codegen", "bridge", "webview", "bindgen"]
+categories = ["development-tools::build-utils", "web-programming"]
+
+[dependencies]
+oxc_allocator = "0.139"
+oxc_parser = "0.139"
+oxc_ast = "0.139"
+oxc_span = "0.139"
+thiserror = { workspace = true }
+serde_json = "1"
+regex = "1"
+
+[dev-dependencies]
+tempfile = "3"
+syn = { version = "2", features = ["full", "parsing"] }

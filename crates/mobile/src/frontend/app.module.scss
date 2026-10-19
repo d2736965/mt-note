@@ -1,0 +1,209 @@
+:global(html) {
+  overflow: clip;
+  width: 100dvw;
+  height: 100dvh;
+}
+
+:global(body) {
+  width: 100%;
+  height: 100%;
+  overflow: clip;
+}
+
+.theme-light {
+  --md-appbar-height: #{$md-appbar-height};
+  --md-bottom-appbar-height: #{$md-bottom-appbar-height};
+
+  --md-primary: #{$md-primary};
+  --md-primary-rgb:
+    #{red($md-primary)}, #{green($md-primary)}, #{blue($md-primary)};
+  --md-on-primary: #{$md-on-primary};
+  --md-primary-container: #{$md-primary-container};
+  --md-on-primary-container: #{$md-on-primary-container};
+
+  --md-secondary: #{$md-secondary};
+  --md-secondary-rgb:
+    #{red($md-secondary)}, #{green($md-secondary)}, #{blue($md-secondary)};
+  --md-on-secondary: #{$md-on-secondary};
+  --md-secondary-container: #{$md-secondary-container};
+  --md-on-secondary-container: #{$md-on-secondary-container};
+
+  --md-tertiary: #{$md-tertiary};
+  --md-tertiary-rgb:
+    #{red($md-tertiary)}, #{green($md-tertiary)}, #{blue($md-tertiary)};
+  --md-on-tertiary: #{$md-on-tertiary};
+  --md-tertiary-container: #{$md-tertiary-container};
+  --md-on-tertiary-container: #{$md-on-tertiary-container};
+
+  --md-error: #{$md-error};
+  --md-error-rgb: #{red($md-error)}, #{green($md-error)}, #{blue($md-error)};
+  --md-on-error: #{$md-on-error};
+  --md-error-container: #{$md-error-container};
+  --md-on-error-container: #{$md-on-error-container};
+
+  --md-surface: #{$md-surface};
+  --md-surface-rgb:
+    #{red($md-surface)}, #{green($md-surface)}, #{blue($md-surface)};
+  --md-on-surface: #{$md-on-surface};
+  --md-on-surface-rgb:
+    #{red($md-on-surface)}, #{green($md-on-surface)}, #{blue($md-on-surface)};
+  --md-surface-variant: #{$md-surface-variant};
+  --md-on-surface-variant: #{$md-on-surface-variant};
+  --md-on-surface-variant-rgb:
+    #{red($md-on-surface-variant)}, #{green($md-on-surface-variant)},
+    #{blue($md-on-surface-variant)};
+  --md-surface-container-lowest: #{$md-surface-container-lowest};
+  --md-surface-container-low: #{$md-surface-container-low};
+  --md-surface-container: #{$md-surface-container};
+  --md-surface-container-high: #{$md-surface-container-high};
+  --md-surface-container-highest: #{$md-surface-container-highest};
+  --md-inverse-surface: #{$md-inverse-surface};
+  --md-inverse-on-surface: #{$md-inverse-on-surface};
+
+  --md-outline: #{$md-outline};
+  --md-outline-variant: #{$md-outline-variant};
+
+	--md-paper: #{$md-paper};
+	--md-code-bg: #{$md-code-bg};
+	--md-code-bg-deep: #{$md-code-bg-deep};
+	--md-code-bg-light: #{$md-code-bg-light};
+
+	// 语义 token 色彩 — 浅色主题「素墨」
+  // 设计理念: 在白色背景上使用中低饱和度色彩，阅读舒适、不刺眼
+  // 适合长时间笔记编辑场景
+  --token-keyword: #9040b8;
+  --token-string: #2d8a2d;
+  --token-comment: #6a737d;
+  --token-function: #2563a8;
+  --token-variable: #8a6d10;
+  --token-parameter: #b83030;
+  --token-number: #9a5800;
+  --token-property: #1a7a74;
+  --token-modifier: #7040a0;
+  --token-operator: #505860;
+  --token-type: #7a6020;
+  --token-class: #1a7068;
+  --token-enum: #4a7020;
+  --token-enum-member: #20803a;
+  --token-interface: #3050a0;
+  --token-struct: #805030;
+  --token-type-parameter: #706030;
+  --token-namespace: #8050a0;
+  --token-method: #1080a0;
+  --token-macro: #a03080;
+  --token-decorator: #a03060;
+  --token-regexp: #a04030;
+  --token-diag-warning: #c89000;
+}
+
+.page {
+  height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  overflow: clip;
+  padding-top: calc(env(safe-area-inset-top) + var(--md-appbar-height));
+  background-color: var(--md-surface);
+  color: var(--md-on-surface);
+  transition:
+    background-color $md-duration-medium $md-easing-standard,
+    color $md-duration-medium $md-easing-standard;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  &.has_bottom_bar {
+    padding-bottom: calc(var(--md-bottom-appbar-height) + env(safe-area-inset-bottom));
+  }
+}
+
+.theme-dark {
+  --md-appbar-height: #{$md-appbar-height};
+  --md-bottom-appbar-height: #{$md-bottom-appbar-height};
+
+  --md-primary: #{$md-dark-primary};
+  --md-primary-rgb:
+    #{red($md-dark-primary)}, #{green($md-dark-primary)},
+    #{blue($md-dark-primary)};
+  --md-on-primary: #{$md-dark-on-primary};
+  --md-primary-container: #{$md-dark-primary-container};
+  --md-on-primary-container: #{$md-dark-on-primary-container};
+
+  --md-secondary: #{$md-dark-secondary};
+  --md-secondary-rgb:
+    #{red($md-dark-secondary)}, #{green($md-dark-secondary)},
+    #{blue($md-dark-secondary)};
+  --md-on-secondary: #{$md-dark-on-secondary};
+  --md-secondary-container: #{$md-dark-secondary-container};
+  --md-on-secondary-container: #{$md-dark-on-secondary-container};
+
+  --md-tertiary: #{$md-dark-tertiary};
+  --md-tertiary-rgb:
+    #{red($md-dark-tertiary)}, #{green($md-dark-tertiary)},
+    #{blue($md-dark-tertiary)};
+  --md-on-tertiary: #{$md-dark-on-tertiary};
+  --md-tertiary-container: #{$md-dark-tertiary-container};
+  --md-on-tertiary-container: #{$md-dark-on-tertiary-container};
+
+  --md-error: #{$md-dark-error};
+  --md-error-rgb:
+    #{red($md-dark-error)}, #{green($md-dark-error)}, #{blue($md-dark-error)};
+  --md-on-error: #{$md-dark-on-error};
+  --md-error-container: #{$md-dark-error-container};
+  --md-on-error-container: #{$md-dark-on-error-container};
+
+  --md-surface: #{$md-dark-surface};
+  --md-surface-rgb:
+    #{red($md-dark-surface)}, #{green($md-dark-surface)},
+    #{blue($md-dark-surface)};
+  --md-on-surface: #{$md-dark-on-surface};
+  --md-on-surface-rgb:
+    #{red($md-dark-on-surface)}, #{green($md-dark-on-surface)},
+    #{blue($md-dark-on-surface)};
+  --md-surface-variant: #{$md-dark-surface-variant};
+  --md-on-surface-variant: #{$md-dark-on-surface-variant};
+  --md-on-surface-variant-rgb:
+    #{red($md-dark-on-surface-variant)}, #{green($md-dark-on-surface-variant)},
+    #{blue($md-dark-on-surface-variant)};
+  --md-surface-container-lowest: #{$md-dark-surface-container-lowest};
+  --md-surface-container-low: #{$md-dark-surface-container-low};
+  --md-surface-container: #{$md-dark-surface-container};
+  --md-surface-container-high: #{$md-dark-surface-container-high};
+  --md-surface-container-highest: #{$md-dark-surface-container-highest};
+  --md-inverse-surface: #{$md-dark-inverse-surface};
+  --md-inverse-on-surface: #{$md-dark-inverse-on-surface};
+
+  --md-outline: #{$md-dark-outline};
+  --md-outline-variant: #{$md-dark-outline-variant};
+
+	--md-paper: #{$md-dark-paper};
+	--md-code-bg: #{$md-dark-code-bg};
+	--md-code-bg-deep: #{$md-dark-code-bg-deep};
+	--md-code-bg-light: #{$md-dark-code-bg-light};
+
+	// 语义 token 色彩 — 暗色主题「星河」
+  // 设计理念: 在深色背景上使用中高饱和度色彩，层次分明、护眼
+  // 适合夜间或低光环境下的笔记编辑
+  --token-keyword: #b584d0;
+  --token-string: #7cc47c;
+  --token-comment: #6b737e;
+  --token-function: #5ca0dc;
+  --token-variable: #d0b468;
+  --token-parameter: #d07070;
+  --token-number: #c89050;
+  --token-property: #48b0a8;
+  --token-modifier: #9a70c0;
+  --token-operator: #98a0ac;
+  --token-type: #c0a050;
+  --token-class: #50a898;
+  --token-enum: #88b458;
+  --token-enum-member: #60b870;
+  --token-interface: #6880c8;
+  --token-struct: #b88868;
+  --token-type-parameter: #b8a870;
+  --token-namespace: #c090d0;
+  --token-method: #48b8d0;
+  --token-macro: #d070b0;
+  --token-decorator: #c86088;
+  --token-regexp: #c87868;
+  --token-diag-warning: #f9a825;
+}

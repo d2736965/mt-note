@@ -1,0 +1,50 @@
+# ============================================================================
+# `#[expect(dead_code)]` 规则
+#
+# - 统一使用 #[expect(dead_code)]，不使用 #[allow(dead_code)]
+# - 枚举：在未使用的变体上标注 #[expect(dead_code)]，而非枚举整体
+# - 函数/方法/struct 字段：在 item 上标注 #[expect(dead_code)]
+# - 配合 #![forbid(unfulfilled_lint_expectations)]，expect 被满足时自动提醒移除
+# ============================================================================
+
+# 测试中允许使用 unwrap/expect/panic
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-panic-in-tests = true
+
+# 对应 #![forbid(clippy::disallowed_types)]
+# 禁止使用 anyhow；禁止阻塞型同步原语（Mutex/RwLock/mpsc），使用 kameo Actor 模型代替
+disallowed-types = [
+  { path = "anyhow::Error", reason = "使用 thiserror 处理错误" },
+  { path = "anyhow::Result", reason = "使用 thiserror 处理错误" },
+  { path = "std::sync::Mutex", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替" },
+  { path = "std::sync::RwLock", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替" },
+  { path = "std::sync::mpsc::Sender", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替" },
+  { path = "std::sync::mpsc::Receiver", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替" },
+  { path = "tokio::sync::Mutex", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替", allow-invalid = true },
+  { path = "tokio::sync::RwLock", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替", allow-invalid = true },
+  { path = "tokio::sync::mpsc::Sender", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替", allow-invalid = true },
+  { path = "tokio::sync::mpsc::Receiver", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替", allow-invalid = true },
+  { path = "dashmap::DashMap", reason = "禁止使用有锁容器，使用 kameo Actor 模型代替", allow-invalid = true },
+  { path = "dashmap::DashSet", reason = "禁止使用有锁容器（内部为 DashMap<K,()> 的分片 RwLock），使用 kameo Actor 模型代替", allow-invalid = true },
+  { path = "std::mem::ManuallyDrop", reason = "禁止用 ManuallyDrop 静默析构 #[must_use] 值。优先用 ? 传播错误，if let Err 仅在线程/顶层等无法传播时使用" },
+]
+
+# 对应 #![forbid(clippy::disallowed_methods)]
+# 禁止使用 anyhow；禁止阻塞型同步原语的构造方法；禁止 drop() 绕过 #[must_use] 检查
+disallowed-methods = [
+  { path = "anyhow::anyhow", reason = "使用 thiserror 处理错误", allow-invalid = true },
+  { path = "anyhow::bail", reason = "使用 thiserror 处理错误", allow-invalid = true },
+  { path = "anyhow::ensure", reason = "使用 thiserror 处理错误", allow-invalid = true },
+  { path = "anyhow::format_err", reason = "使用 thiserror 处理错误", allow-invalid = true },
+  { path = "anyhow::Context::context", reason = "使用 thiserror 处理错误" },
+  { path = "anyhow::Context::with_context", reason = "使用 thiserror 处理错误" },
+  { path = "std::sync::mpsc::channel", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替" },
+  { path = "std::sync::mpsc::sync_channel", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替" },
+  { path = "tokio::sync::mpsc::channel", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替", allow-invalid = true },
+  { path = "tokio::sync::mpsc::unbounded_channel", reason = "禁用阻塞型同步原语，使用 kameo Actor 模型代替", allow-invalid = true },
+  { path = "std::mem::drop", reason = "禁止用 drop() 绕过 #[must_use] 检查。优先用 ? 传播错误，if let Err 仅在线程/顶层等无法传播时使用" },
+  { path = "std::mem::forget", reason = "forget 跳过 Drop 析构，导致资源泄漏。如需提前释放，让变量自然离开作用域" },
+  { path = "std::hint::black_box", reason = "禁止用 black_box() 绕过 #[must_use] 检查。优先用 ? 传播错误，if let Err 仅在线程/顶层等无法传播时使用" },
+  { path = "dioxus::document::eval", reason = "禁止直接使用裸 JS，必须通过 js-bridge-bindgen 生成的类型安全 API 调用", allow-invalid = true },
+]

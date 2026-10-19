@@ -1,0 +1,62 @@
+.ctx_overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  .ctx_sheet {
+    background: var(--md-surface-container);
+    border-radius: 16px 16px 0 0;
+    width: 100%;
+    max-width: 480px;
+    padding: $md-space-sm 0 $md-space-md;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .ctx_title {
+      padding: $md-space-sm $md-space-lg;
+      font-size: $md-font-body-sm;
+      color: var(--md-on-surface-variant);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ctx_item {
+      padding: $md-space-md $md-space-lg;
+      font-size: $md-font-body-lg;
+      color: var(--md-on-surface);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+
+      &:active {
+        background: var(--md-surface-container-high);
+      }
+
+      &.ctx_danger {
+        color: var(--md-error);
+      }
+
+      &.ctx_back {
+        border-bottom: 1px solid var(--md-outline-variant);
+      }
+
+      &.has_submenu {
+        .arrow {
+          margin-left: auto;
+          font-size: 0.7em;
+          opacity: 0.54;
+        }
+      }
+    }
+  }
+}

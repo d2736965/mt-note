@@ -1,0 +1,35 @@
+[web.app]
+title = "Mt Note"
+
+[web.watcher]
+watch_path = ["src", "android", "assets"]
+
+[bundle]
+identifier = "com.d2736965.app.mt_note_mobile"
+publisher = "d2736965"
+
+[bundle.android]
+jks_file = "crates/mobile/dioxus-build.jks"
+jks_password = "temp123"
+key_alias = "temp"
+key_password = "temp123"
+
+[android]
+min_sdk = 26
+target_sdk = 36
+res_dir = "android/res"
+gradle_dependencies = [
+    "androidx.core:core-ktx:1.12.0",
+    "androidx.activity:activity-ktx:1.8.0",
+]
+
+[application]
+android_manifest = "android/AndroidManifest.xml"
+android_main_activity = "android/MainActivity.kt"
+
+
+[web.resource]
+style = []
+
+[web.resource.dev]
+script = []

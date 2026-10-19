@@ -1,0 +1,178 @@
+.empty_state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $md-space-xl;
+    gap: $md-space-md;
+    color: var(--md-on-surface-variant);
+
+    .empty_icon {
+        font-size: 48px;
+        opacity: 0.5;
+    }
+
+    .empty_text {
+        font-size: $md-font-body-lg;
+    }
+
+    .empty_hint {
+        font-size: $md-font-body-sm;
+        opacity: 0.7;
+    }
+}
+
+.fav_list {
+    display: flex;
+    flex-direction: column;
+
+    .fav_item {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--md-outline-variant);
+
+        .fav_item_content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: $md-space-md;
+            padding: $md-space-md $md-space-lg;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            min-width: 0;
+
+            &:active {
+                background: var(--md-surface-container-high);
+            }
+
+            .fav_item_icon {
+                flex-shrink: 0;
+
+                svg {
+                    width: 24px;
+                    height: 24px;
+                    color: var(--md-primary);
+                }
+            }
+
+            .fav_item_info {
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+
+                .fav_item_name {
+                    font-size: $md-font-body-lg;
+                    color: var(--md-on-surface);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                .fav_item_path {
+                    font-size: $md-font-body-sm;
+                    color: var(--md-on-surface-variant);
+                    overflow-x: auto;
+                    white-space: nowrap;
+                    -webkit-overflow-scrolling: touch;
+
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .fav_remove_btn {
+            flex-shrink: 0;
+            padding: $md-space-sm;
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            &:active {
+                color: var(--md-error);
+            }
+        }
+    }
+}
+
+.breadcrumb_bar {
+    display: flex;
+    align-items: center;
+    padding: $md-space-xs $md-space-md;
+    gap: 2px;
+    border-bottom: 1px solid var(--md-outline-variant);
+    background: var(--md-surface-container);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .breadcrumb_root {
+        background: transparent;
+        border: none;
+        color: var(--md-primary);
+        padding: $md-space-xs;
+        border-radius: $md-radius-xs;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+        &:active {
+            background: var(--md-primary-container);
+        }
+    }
+
+    .breadcrumb_sep {
+        color: var(--md-on-surface-variant);
+        font-size: $md-font-body-sm;
+        flex-shrink: 0;
+    }
+
+    .breadcrumb_btn {
+        background: transparent;
+        border: none;
+        color: var(--md-primary);
+        padding: $md-space-xs;
+        border-radius: $md-radius-xs;
+        cursor: pointer;
+        font-size: $md-font-body-sm;
+        white-space: nowrap;
+        flex-shrink: 0;
+
+        &:active {
+            background: var(--md-primary-container);
+        }
+    }
+
+    .breadcrumb_current {
+        color: var(--md-on-surface);
+        font-size: $md-font-body-sm;
+        font-weight: $md-weight-medium;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+
+.entry_list {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}

@@ -1,0 +1,450 @@
+.settings_view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  // 作为滚动容器：内容超出时提供滚动，
+  // 同时让 flex 子项 min-height 重置为 0（flexbox 规范），
+  // 使键盘弹起压缩父级高度时，本容器能正确收缩并允许滚动到底部输入框。
+  overflow-y: auto;
+  padding: $md-space-md;
+  background-color: var(--md-surface);
+  transition: background-color 0.3s ease;
+
+  .settings_section {
+    margin-bottom: $md-space-lg;
+
+    .section_title {
+      font-size: $md-font-title-sm;
+      font-weight: $md-weight-medium;
+      color: var(--md-primary);
+      margin: 0 0 $md-space-md 0;
+      transition: color 0.3s ease;
+    }
+
+    .setting_item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: $md-space-md;
+      background-color: var(--md-surface-container);
+      border-radius: $md-radius-md;
+      transition: background-color 0.3s ease;
+
+      .setting_info {
+        display: flex;
+        flex-direction: column;
+        gap: $md-space-xs;
+
+        .setting_label {
+          font-size: $md-font-body-md;
+          color: var(--md-on-surface);
+          transition: color 0.3s ease;
+        }
+
+        .setting_description {
+          font-size: $md-font-body-sm;
+          color: var(--md-on-surface-variant);
+          transition: color 0.3s ease;
+        }
+      }
+
+      // 两段式切换器（主题/启动页等）与语言选择器共用同一组按钮样式
+      .theme_switcher, .lang_segmented {
+        display: flex;
+        gap: $md-space-xs;
+        background-color: var(--md-surface-variant);
+        padding: $md-space-xs;
+        border-radius: $md-radius-full;
+        transition: background-color 0.3s ease;
+
+        .theme_btn {
+          padding: $md-space-xs $md-space-md;
+          border: none;
+          background: transparent;
+          border-radius: $md-radius-full;
+          font-size: $md-font-body-sm;
+          color: var(--md-on-surface-variant);
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background-color: rgba(var(--md-on-surface-rgb), 0.08);
+          }
+
+          &.active {
+            background-color: var(--md-primary);
+            color: var(--md-on-primary);
+          }
+        }
+      }
+
+      // 语言两段式选择器：左段「跟随系统」+ 右段当前语言（点击弹纵向列表）
+      .lang_switcher {
+        position: relative;
+        flex-shrink: 0;
+
+        // 右段按钮文字与下拉箭头同行居中，禁止换行（与左段等高对齐）
+        .lang_segmented .theme_btn {
+          display: inline-flex;
+          align-items: center;
+          white-space: nowrap;
+        }
+
+        .lang_chevron {
+          width: 18px;
+          height: 18px;
+          flex-shrink: 0;
+        }
+
+        .lang_menu_mask {
+          position: fixed;
+          inset: 0;
+          z-index: 90;
+          background: transparent;
+        }
+
+        .lang_menu {
+          position: absolute;
+          top: calc(100% + $md-space-xs);
+          right: 0;
+          z-index: 91;
+          min-width: 160px;
+          max-height: 320px;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          padding: $md-space-xs;
+          background-color: var(--md-surface-container);
+          border-radius: $md-radius-md;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+
+          .lang_menu_item {
+            padding: $md-space-sm $md-space-md;
+            border: none;
+            background: transparent;
+            border-radius: $md-radius-sm;
+            font-size: $md-font-body-md;
+            color: var(--md-on-surface);
+            text-align: left;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+
+            &:active {
+              background-color: var(--md-surface-variant);
+            }
+
+            &.active {
+              background-color: var(--md-primary);
+              color: var(--md-on-primary);
+            }
+          }
+        }
+      }
+
+      .toggle_label {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 28px;
+        flex-shrink: 0;
+      }
+
+      .toggle_input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+
+        &:checked + .toggle_switch {
+          background-color: var(--md-primary);
+
+          &::before {
+            transform: translateX(20px);
+          }
+        }
+      }
+
+      .toggle_switch {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--md-outline);
+        border-radius: $md-radius-full;
+        transition: background-color $md-duration-short $md-easing-standard;
+
+        &::before {
+          content: "";
+          position: absolute;
+          height: 20px;
+          width: 20px;
+          left: 4px;
+          bottom: 4px;
+          background-color: var(--md-surface);
+          border-radius: 50%;
+          transition: transform $md-duration-short $md-easing-standard;
+        }
+      }
+
+      .stepper {
+        display: flex;
+        align-items: center;
+        gap: $md-space-xs;
+        flex-shrink: 0;
+
+        .stepper_btn {
+          width: 32px;
+          height: 32px;
+          border: 1px solid var(--md-outline);
+          border-radius: $md-radius-sm;
+          background: var(--md-surface-container);
+          color: var(--md-on-surface);
+          font-size: $md-font-body-lg;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all $md-duration-short $md-easing-standard;
+
+          &:active {
+            background: var(--md-primary-container);
+          }
+        }
+
+        .stepper_value {
+          min-width: 36px;
+          text-align: center;
+          font-size: $md-font-body-md;
+          font-family: "JetBrains Mono", "Fira Code", monospace;
+          color: var(--md-on-surface);
+        }
+      }
+    }
+
+    .font_path_item {
+      display: flex;
+      align-items: center;
+      gap: $md-space-sm;
+      padding: $md-space-sm $md-space-md;
+      background-color: var(--md-surface-container);
+      border-radius: $md-radius-md;
+      margin-bottom: $md-space-xs;
+
+      .font_path_icon {
+        width: 20px;
+        height: 20px;
+        color: var(--md-on-surface-variant);
+        flex-shrink: 0;
+      }
+
+      .font_path_text {
+        flex: 1;
+        font-size: $md-font-body-sm;
+        color: var(--md-on-surface);
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        word-break: break-all;
+      }
+
+      .font_path_delete {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        color: var(--md-error);
+        flex-shrink: 0;
+        background: none;
+        border: none;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: var(--md-on-error-container);
+        }
+
+        .font_path_delete_icon {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+
+    .font_path_add {
+      display: flex;
+      gap: $md-space-sm;
+      margin-top: $md-space-sm;
+
+      .font_path_input_wrapper {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .font_path_input {
+          width: 100%;
+          padding: $md-space-sm $md-space-md;
+          padding-right: 40px;
+          border: 1px solid var(--md-outline);
+          border-radius: $md-radius-md;
+          background-color: var(--md-surface-container);
+          color: var(--md-on-surface);
+          font-size: $md-font-body-sm;
+          font-family: "JetBrains Mono", "Fira Code", monospace;
+          outline: none;
+          transition: border-color 0.2s ease;
+
+          &:focus {
+            border-color: var(--md-primary);
+          }
+
+          &::placeholder {
+            color: var(--md-on-surface-variant);
+          }
+        }
+
+        .font_path_picker_btn {
+          position: absolute;
+          right: 4px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 32px;
+          height: 32px;
+          cursor: pointer;
+          color: var(--md-on-surface-variant);
+          background: none;
+          border: none;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:active {
+            opacity: 0.7;
+          }
+
+          .font_path_picker_icon {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+
+      .font_path_add_btn {
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        color: var(--md-primary);
+        background: none;
+        border: 1px solid var(--md-primary);
+        border-radius: $md-radius-md;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: var(--md-primary-container);
+        }
+
+        .font_path_add_icon {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    // 默认目录输入行：单值输入 + 保存按钮
+    // 与 font_path_add（数组添加）区分，按钮语义为"提交"
+    .dir_input_row {
+      display: flex;
+      gap: $md-space-sm;
+      margin-top: $md-space-sm;
+
+      .dir_input_wrapper {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .dir_input {
+          width: 100%;
+          padding: $md-space-sm $md-space-md;
+          padding-right: 40px;
+          border: 1px solid var(--md-outline);
+          border-radius: $md-radius-md;
+          background-color: var(--md-surface-container);
+          color: var(--md-on-surface);
+          font-size: $md-font-body-sm;
+          font-family: "JetBrains Mono", "Fira Code", monospace;
+          outline: none;
+          transition: border-color 0.2s ease;
+
+          &:focus {
+            border-color: var(--md-primary);
+          }
+
+          &::placeholder {
+            color: var(--md-on-surface-variant);
+          }
+        }
+
+        .dir_picker_btn {
+          position: absolute;
+          right: 2px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 32px;
+          height: 32px;
+          border: none;
+          background: transparent;
+          border-radius: $md-radius-sm;
+          color: var(--md-on-surface-variant);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          transition: all 0.2s ease;
+
+          &:active {
+            background: var(--md-surface-variant);
+            color: var(--md-primary);
+          }
+
+          .dir_picker_icon {
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+
+      .dir_save_btn {
+        flex-shrink: 0;
+        padding: 0 $md-space-md;
+        height: 36px;
+        border: none;
+        border-radius: $md-radius-md;
+        background-color: var(--md-primary);
+        color: var(--md-on-primary);
+        font-size: $md-font-body-sm;
+        font-weight: $md-weight-medium;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:active {
+          background-color: var(--md-primary-container);
+          color: var(--md-on-primary-container);
+        }
+      }
+    }
+  }
+}

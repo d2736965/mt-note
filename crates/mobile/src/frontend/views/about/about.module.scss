@@ -1,0 +1,71 @@
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $md-space-lg;
+  gap: $md-space-lg;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $md-space-xs;
+  }
+
+  .app_name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--md-on-surface);
+  }
+
+  .description {
+    font-size: $md-font-body-lg;
+    color: var(--md-on-surface-variant);
+    text-align: center;
+  }
+
+  .license_section {
+    width: 100%;
+    max-width: 320px;
+    background: var(--md-surface-container);
+    border-radius: $md-radius-lg;
+    padding: $md-space-xs $md-space-md;
+  }
+
+  .license_row {
+    display: flex;
+    align-items: center;
+    gap: $md-space-sm;
+    width: 100%;
+    padding: $md-space-sm 0;
+    border: none;
+    background: transparent;
+    font-size: $md-font-body-md;
+    text-align: left;
+    cursor: pointer;
+
+    .license_label {
+      color: var(--md-on-surface-variant);
+    }
+
+    .license_value {
+      flex: 1;
+      text-align: right;
+      color: var(--md-on-surface);
+      font-weight: 500;
+    }
+
+    .license_chevron {
+      color: var(--md-on-surface-variant);
+      flex-shrink: 0;
+    }
+  }
+
+  .footer {
+    font-size: $md-font-body-sm;
+    color: var(--md-on-surface-variant);
+    margin-top: $md-space-md;
+  }
+}

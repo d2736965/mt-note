@@ -1,0 +1,26 @@
+# Android NDK linker/ar 配置模板（默认整段注释，按需启用）
+# 背景：dx linker wrapper 问题 https://github.com/DioxusLabs/dioxus/issues/5118
+# 1) 本机 ~/.cargo/config.toml 已配置 linker 时：保持注释即可，全局配置直接生效
+# 2) 无全局配置时：取消注释；裸名要求 NDK toolchain bin 在 PATH，也可直接写绝对路径
+# 什么都不配：rustc 回退宿主 cc，报 unable to find library -llog
+
+# [target.aarch64-linux-android]
+# linker = "aarch64-linux-android28-clang"
+# ar = "llvm-ar"
+
+# [target.armv7-linux-androideabi]
+# linker = "armv7a-linux-androideabi28-clang"
+# ar = "llvm-ar"
+
+# [target.x86_64-linux-android]
+# linker = "x86_64-linux-android28-clang"
+# ar = "llvm-ar"
+
+# [target.i686-linux-android]
+# linker = "i686-linux-android28-clang"
+# ar = "llvm-ar"
+
+# [build] 不启用：dylint 的 check.py 需要多目标质检，此处指定 target 会报错；
+# Android 构建由 dx bundle 的 --target 参数指定
+# [build]
+# target = "aarch64-linux-android"

@@ -1,0 +1,23 @@
+.preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .preview_placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: $md-space-md;
+    color: var(--md-on-surface-variant);
+    font-size: $md-font-body-lg;
+
+    .placeholder_icon {
+      width: 48px;
+      height: 48px;
+      opacity: 0.5;
+    }
+  }
+}

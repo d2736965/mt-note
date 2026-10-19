@@ -1,0 +1,60 @@
+@use "variables" as *;
+
+:root {
+  --md-appbar-height: #{$md-appbar-height};
+  --md-bottom-appbar-height: #{$md-bottom-appbar-height};
+  --md-appbar-padding-top: #{$md-space-xs};
+
+  --md-primary: #{$md-primary};
+  --md-primary-rgb:
+    #{red($md-primary)}, #{green($md-primary)}, #{blue($md-primary)};
+  --md-on-primary: #{$md-on-primary};
+  --md-primary-container: #{$md-primary-container};
+  --md-on-primary-container: #{$md-on-primary-container};
+
+  --md-secondary: #{$md-secondary};
+  --md-secondary-rgb:
+    #{red($md-secondary)}, #{green($md-secondary)}, #{blue($md-secondary)};
+  --md-on-secondary: #{$md-on-secondary};
+  --md-secondary-container: #{$md-secondary-container};
+  --md-on-secondary-container: #{$md-on-secondary-container};
+
+  --md-tertiary: #{$md-tertiary};
+  --md-tertiary-rgb:
+    #{red($md-tertiary)}, #{green($md-tertiary)}, #{blue($md-tertiary)};
+  --md-on-tertiary: #{$md-on-tertiary};
+  --md-tertiary-container: #{$md-tertiary-container};
+  --md-on-tertiary-container: #{$md-on-tertiary-container};
+
+  --md-error: #{$md-error};
+  --md-error-rgb: #{red($md-error)}, #{green($md-error)}, #{blue($md-error)};
+  --md-on-error: #{$md-on-error};
+  --md-error-container: #{$md-error-container};
+  --md-on-error-container: #{$md-on-error-container};
+
+  --md-surface: #{$md-surface};
+  --md-surface-rgb:
+    #{red($md-surface)}, #{green($md-surface)}, #{blue($md-surface)};
+  --md-on-surface: #{$md-on-surface};
+  --md-on-surface-rgb:
+    #{red($md-on-surface)}, #{green($md-on-surface)}, #{blue($md-on-surface)};
+  --md-surface-variant: #{$md-surface-variant};
+  --md-on-surface-variant: #{$md-on-surface-variant};
+  --md-on-surface-variant-rgb:
+    #{red($md-on-surface-variant)}, #{green($md-on-surface-variant)},
+    #{blue($md-on-surface-variant)};
+  --md-surface-container-lowest: #{$md-surface-container-lowest};
+  --md-surface-container-low: #{$md-surface-container-low};
+  --md-surface-container: #{$md-surface-container};
+  --md-surface-container-high: #{$md-surface-container-high};
+  --md-surface-container-highest: #{$md-surface-container-highest};
+	--md-inverse-surface: #{$md-inverse-surface};
+	--md-inverse-on-surface: #{$md-inverse-on-surface};
+
+	--md-code-bg: #{$md-code-bg};
+	--md-code-bg-deep: #{$md-code-bg-deep};
+	--md-code-bg-light: #{$md-code-bg-light};
+
+  --md-outline: #{$md-outline};
+  --md-outline-variant: #{$md-outline-variant};
+}

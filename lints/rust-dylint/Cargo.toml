@@ -1,0 +1,18 @@
+[package]
+name = "rust-dylint"
+version = "0.1.0"
+authors = ["d2736965"]
+description = "dylint 规则库：forbid_underscore_must_use、forbid_mpsc_channel、forbid_dropped_result、forbid_bare_return、forbid_empty_block、forbid_unused_variables_attr、deny_lib_console_output"
+edition = "2024"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+dylint_linting = "6.0.1"
+
+[workspace]
+
+[package.metadata.rust-analyzer]
+rustc_private = true

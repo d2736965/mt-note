@@ -1,0 +1,534 @@
+.md_content {
+  font-size: $md-font-body-lg;
+  line-height: 1.6;
+  color: var(--md-on-surface);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  -webkit-user-select: text;
+  user-select: text;
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: $md-space-lg 0 $md-space-sm;
+    font-weight: $md-weight-medium;
+    line-height: 1.3;
+    color: var(--md-on-surface);
+  }
+  h1 {
+    font-size: $md-heading-h1;
+    border-bottom: 2px solid var(--md-outline-variant);
+    padding-bottom: $md-space-xs;
+  }
+  h2 {
+    font-size: $md-heading-h2;
+    border-bottom: 1px solid var(--md-outline-variant);
+    padding-bottom: $md-space-xs;
+  }
+  h3 { font-size: $md-heading-h3; }
+  h4 { font-size: $md-heading-h4; }
+  h5 { font-size: $md-heading-h5; }
+  h6 {
+    font-size: $md-heading-h6;
+    color: var(--md-on-surface-variant);
+  }
+
+  p {
+    margin: $md-space-sm 0;
+  }
+
+  // **加粗**：bold（700）与正文 400 拉开差距；medium(500) 在中文字体上
+  // 与 regular 几乎无差别，用户无法辨识
+  strong { font-weight: $md-weight-bold; }
+  em { font-style: italic; }
+  del { text-decoration: line-through; }
+
+  code {
+    padding: 0.15em 0.4em;
+    background-color: var(--md-code-bg);
+    border-radius: $md-radius-xs;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9em;
+  }
+
+  // 代码块卡片：顶栏（语言名 + 复制按钮）+ pre，与表格卡片同构。
+  // 按钮在顶栏文档流内，不悬浮、不随 pre 横向滚动、不遮挡代码
+  :global(.md-code-wrapper) {
+    margin: $md-space-sm 0;
+    border: 1px solid var(--md-outline-variant);
+    border-radius: $md-radius-sm;
+    overflow: clip;
+
+    :global(.md-code-bar) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $md-space-xs $md-space-sm;
+      background-color: var(--md-code-bg-deep);
+      border-bottom: 1px solid var(--md-outline-variant);
+
+      :global(.md-code-lang) {
+        font-size: $md-font-body-md;
+        font-weight: $md-weight-medium;
+        color: var(--md-on-surface);
+      }
+
+      :global(.md-code-actions) {
+        display: flex;
+        gap: $md-space-xs;
+
+        :global(.md-copy-btn) {
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          background: none;
+          color: var(--md-on-surface-variant);
+          border-radius: $md-radius-xs;
+          cursor: pointer;
+          padding: 0;
+
+          svg {
+            width: 18px;
+            height: 18px;
+          }
+
+          &:hover {
+            background-color: var(--md-code-bg);
+          }
+        }
+      }
+    }
+
+    pre {
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+
+  pre {
+    margin: $md-space-sm 0;
+    padding: $md-space-md;
+    background-color: var(--md-code-bg);
+    border-radius: $md-radius-sm;
+    overflow-x: auto;
+    font-size: $md-font-body-md;
+
+    code {
+      padding: 0;
+      background: none;
+      font-family: 'Roboto Mono', monospace;
+      white-space: pre;
+
+      // highlight.js 语法高亮 — 映射到 semantic token 变量，自动响应主题切换
+      :global(.hljs-keyword) { color: var(--token-keyword); font-weight: $md-weight-medium; }
+      :global(.hljs-string) { color: var(--token-string); }
+      :global(.hljs-comment) { color: var(--token-comment); font-style: italic; }
+      :global(.hljs-function),
+      :global(.hljs-title.function_) { color: var(--token-function); }
+      :global(.hljs-number) { color: var(--token-number); }
+      :global(.hljs-operator) { color: var(--token-operator); }
+      :global(.hljs-type) { color: var(--token-type); }
+      :global(.hljs-built_in) { color: var(--token-function); }
+      :global(.hljs-literal) { color: var(--token-number); }
+      :global(.hljs-params) { color: var(--token-variable); }
+      :global(.hljs-title.class_) { color: var(--token-class); }
+      :global(.hljs-title) { color: var(--token-function); }
+      :global(.hljs-meta) { color: var(--token-comment); }
+      :global(.hljs-regexp) { color: var(--token-regexp); }
+      :global(.hljs-attr) { color: var(--token-parameter); }
+      :global(.hljs-attribute) { color: var(--token-property); }
+      :global(.hljs-selector-tag) { color: var(--token-keyword); }
+      :global(.hljs-selector-class) { color: var(--token-class); }
+      :global(.hljs-selector-id) { color: var(--token-function); }
+      :global(.hljs-variable) { color: var(--token-variable); }
+      :global(.hljs-template-variable) { color: var(--token-variable); }
+      :global(.hljs-symbol) { color: var(--token-variable); }
+      :global(.hljs-property) { color: var(--token-property); }
+      :global(.hljs-tag) { color: var(--token-keyword); }
+      :global(.hljs-name) { color: var(--md-on-surface); }
+      :global(.hljs-deletion) { color: var(--md-error); }
+      :global(.hljs-addition) { color: var(--token-string); }
+      :global(.hljs-emphasis) { font-style: italic; }
+      :global(.hljs-strong) { font-weight: $md-weight-bold; }
+      :global(.hljs-link) { color: var(--md-primary); text-decoration: underline; }
+      :global(.hljs-punctuation) { color: var(--token-operator); }
+      :global(.hljs-doctag) { color: var(--token-keyword); }
+      :global(.hljs-section) { color: var(--token-string); }
+      :global(.hljs-quote) { color: var(--token-comment); }
+      :global(.hljs-subst) { color: var(--token-variable); }
+      :global(.hljs-formula) { color: var(--token-variable); }
+    }
+  }
+
+  blockquote {
+    margin: $md-space-sm 0;
+    padding: $md-space-sm $md-space-md;
+    border-left: 3px solid var(--md-outline-variant);
+    background-color: var(--md-code-bg-light);
+    border-radius: 0 $md-radius-xs $md-radius-xs 0;
+    color: var(--md-on-surface-variant);
+
+    p {
+      margin: $md-space-xs 0;
+    }
+  }
+
+  ul {
+    margin: $md-space-sm 0;
+    padding-left: $md-space-xl;
+    list-style-type: disc;
+  }
+
+  ol {
+    margin: $md-space-sm 0;
+    padding-left: $md-space-xl;
+    list-style-type: decimal;
+  }
+
+  ul ul {
+    list-style-type: circle;
+  }
+
+  ul ul ul {
+    list-style-type: square;
+  }
+
+  li {
+    margin: $md-space-xs 0;
+  }
+
+  hr {
+    margin: $md-space-lg 0;
+    border: none;
+    border-top: 1px solid var(--md-outline-variant);
+  }
+
+  a {
+    color: var(--md-primary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: $md-radius-sm;
+  }
+
+  // 覆盖全局 reset 的 svg { max-width: 100% }：无 viewBox 的 SVG 无法等比缩放，
+  // 压到容器宽度等于把右侧内容裁掉。md 内容里的 svg 一律按原始宽度渲染，
+  // 溢出交给滚动容器（.md-graphic-scroll / .mermaid / .md-table-scroll）
+  svg {
+    max-width: none;
+  }
+
+  // 全局 reset 把 svg 设为 display:block，段落文字里的行内小图标会被折行成
+  // 独立块。:where 保持零特异性——KaTeX（.katex svg）、mermaid、滚动容器等
+  // 自带 display 的场景不受影响，仅兜住无其他样式的行内图形
+  :where(p, li, td, th, blockquote, h1, h2, h3, h4, h5, h6) svg {
+    display: inline;
+    vertical-align: middle;
+  }
+
+  :global(.md-table-wrapper) {
+    margin: $md-space-sm 0;
+    border: 1px solid var(--md-outline-variant);
+    border-radius: $md-radius-sm;
+    overflow: clip;
+
+    :global(.md-table-bar) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $md-space-xs $md-space-sm;
+	      background-color: var(--md-code-bg-deep);
+      border-bottom: 1px solid var(--md-outline-variant);
+      border-radius: $md-radius-sm $md-radius-sm 0 0;
+
+      :global(.md-table-bar-title) {
+        font-size: $md-font-body-md;
+        font-weight: $md-weight-medium;
+        color: var(--md-on-surface);
+      }
+
+      :global(.md-table-bar-actions) {
+        display: flex;
+        gap: $md-space-xs;
+
+        button {
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          background: none;
+          color: var(--md-on-surface-variant);
+          border-radius: $md-radius-xs;
+          cursor: pointer;
+          padding: 0;
+
+          svg {
+            width: 18px;
+            height: 18px;
+          }
+
+	          &:hover {
+	            background-color: var(--md-code-bg-deep);
+	          }
+        }
+      }
+    }
+
+    :global(.md-table-scroll) {
+      overflow-x: auto;
+      border-radius: 0 0 $md-radius-sm $md-radius-sm;
+    }
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+
+      th, td {
+        padding: $md-space-xs $md-space-sm;
+        text-align: left;
+      }
+
+	      th {
+	        background-color: var(--md-code-bg);
+	        font-weight: $md-weight-bold;
+	      }
+
+	      tbody tr:nth-child(even) {
+	        background-color: var(--md-code-bg-light);
+	      }
+    }
+  }
+
+  :global(.math-scroll-wrapper) {
+    overflow-x: auto;
+    overscroll-behavior-x: none;
+  }
+
+  // 内联 SVG 滚动容器（TS 侧仅包裹实际溢出的图形）：超宽图形保持原始宽度，
+  // 横向滚动查看全部内容（同 .md-table-scroll 方案）；竖向不滚动，高度随
+  // 图形自由撑开
+  :global(.md-graphic-scroll) {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: none;
+
+    > svg {
+      display: block; // 行内基线对齐会在容器底部留一行基线缝隙
+    }
+  }
+
+  :global(.katex-display) {
+    margin: $md-space-sm 0;
+  }
+
+  :global(.mermaid) {
+    margin: $md-space-sm 0;
+    padding: $md-space-md;
+    background-color: var(--md-code-bg-light);
+    border-radius: $md-radius-sm;
+    overflow-x: auto;
+    overscroll-behavior-x: none;
+    text-align: center;
+
+    // 图表按自然尺寸渲染（TS 侧 useMaxWidth: false），超宽由容器横向滚动；
+    // 窄图经 auto 边距居中，超宽时 auto 边距归零靠左，保证左侧内容可滚动到达
+    svg {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  :global(.footnote-reference) {
+    a {
+      color: var(--md-primary);
+      text-decoration: none;
+      font-size: 0.8em;
+    }
+  }
+
+  :global(.footnotes) {
+    margin-top: $md-space-lg;
+
+    ol {
+      padding-left: $md-space-xl;
+      list-style-type: decimal;
+    }
+
+    li {
+      margin: $md-space-xs 0;
+      color: var(--md-on-surface-variant);
+      font-size: $md-font-body-md;
+
+      p {
+        margin: 0;
+        display: inline;
+      }
+    }
+
+    :global(.footnote-back) {
+      color: var(--md-primary);
+      text-decoration: none;
+      margin-left: 0.3em;
+      font-size: 0.8em;
+    }
+  }
+}
+
+:global([class*="theme-dark"]) {
+  .md_content {
+    img[src$=".svg"] {
+      filter: invert(1);
+    }
+  }
+}
+
+// 图形灯箱：全屏预览浮层（JS 挂载到 body 下，不在 .md_content 内，故为顶层 :global）
+// 层级：对话框(1000) < 灯箱(2000) < toast(9999)，保证 toast 仍可见
+:global(.md-img-lightbox) {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  // 背景跟随主题 surface（亮色浅底/暗色深底）：纯黑会让浅色主题下黑描边的
+  // 图形隐形，看起来像暗色主题的渲染效果；保持不透明，避免下方内容透成「影子」
+  background-color: var(--md-surface);
+  // 触摸手势（捏合/平移/单击关闭）全部由 JS 接管，禁用 WebView 默认手势
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 0.18s ease-out;
+  user-select: none;
+  -webkit-user-select: none;
+
+  // 托底框：JS 按 contain 尺寸定宽高，inset:0 + auto 边距居中；棋盘格垫底 +
+  // 细边框标示图片矩形边界——透明图片在主题 surface 底上原本与背景融为一体，
+  // 看不出哪里是图片哪里是浮层（棋盘格也是看图器标示透明区域的标准做法）
+  :global(.md-lightbox-frame) {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    box-sizing: border-box;
+    overflow: hidden;
+    pointer-events: none;
+    background-image: conic-gradient(
+      rgba(var(--md-on-surface-rgb), 0.08) 0 25%,
+      transparent 0 50%,
+      rgba(var(--md-on-surface-rgb), 0.08) 0 75%,
+      transparent 0
+    );
+    background-size: 16px 16px;
+    border: 1px solid var(--md-outline-variant);
+
+    img,
+    :global(.md-lightbox-svg) {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      // 触摸统一由浮层处理，预览元素本身不响应指针/拖拽
+      pointer-events: none;
+    }
+
+    img {
+      // contain 使 scale(1) 即为适配屏幕的初始状态，JS 侧无需感知图片尺寸
+      object-fit: contain;
+      -webkit-user-drag: none;
+    }
+
+    // 无 viewBox 的 svg：替换元素不随元素盒缩放，按原始尺寸渲染，
+    // 绝对定位 + auto 边距在托底框内居中并限幅
+    // （类由 TS 侧 classList.add 添加，须 :global 避开 stylance 常量生成）
+    :global(.md-lightbox-svg--fixed) {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      margin: auto;
+    }
+  }
+
+  // 底部浮动工具栏：适应宽度 / 1:1 原始尺寸 / 钉住缩放锚点 / 回到视口中心 /
+  // 关闭。配色全走主题变量，预览中切换主题自动跟随；显隐由 TS 切换 --hidden
+  // 类（淡出 + 下沉）
+  :global(.md-lightbox-toolbar) {
+    position: absolute;
+    left: 50%;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    background-color: var(--md-surface-container-high);
+    border: 1px solid var(--md-outline-variant);
+    border-radius: 999px;
+    box-shadow:
+      0 4px 16px rgba(var(--md-on-surface-rgb), 0.16),
+      0 1px 4px rgba(var(--md-on-surface-rgb), 0.2);
+    transform: translateX(-50%);
+    opacity: 1;
+    transition:
+      opacity 0.18s ease-out,
+      transform 0.18s ease-out;
+    touch-action: none;
+
+    // 隐藏态类只由 TS 字符串切换、Rust 侧不引用，须 :global 避开 stylance
+    // 哈希（哈希后 TS 写的原始类名匹配不上）与未使用常量的 dead_code 报错
+    &:global(.md-lightbox-toolbar--hidden) {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 12px);
+    }
+
+    :global(.md-lightbox-btn) {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      color: var(--md-on-surface-variant);
+      border-radius: 50%;
+      cursor: pointer;
+      padding: 0;
+
+      svg {
+        width: 22px;
+        height: 22px;
+        fill: currentColor;
+      }
+
+      &:active {
+        background-color: rgba(var(--md-on-surface-rgb), 0.08);
+      }
+    }
+
+    // 钉住激活态：主色图标 + 主色浅底片，实心/描边之外的第三种状态线索
+    :global(.md-lightbox-btn.is-active) {
+      color: var(--md-primary);
+      background-color: rgba(var(--md-primary-rgb), 0.14);
+    }
+
+    // 文本按钮（1:1 原始尺寸）：与图标按钮同框同尺寸，仅以小号文字替代图标
+    :global(.md-lightbox-btn.md-lightbox-btn--text) {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    :global(.md-lightbox-toolbar-divider) {
+      width: 1px;
+      height: 22px;
+      margin: 0 4px;
+      background-color: var(--md-outline-variant);
+    }
+  }
+}

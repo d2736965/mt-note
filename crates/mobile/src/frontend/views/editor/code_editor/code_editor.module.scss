@@ -1,0 +1,530 @@
+.code_editor {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  background: var(--md-paper);
+  color: var(--md-on-surface);
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+  font-size: $md-font-body-md;
+  line-height: 1.6;
+
+  .editor_scroll {
+    flex: 1;
+    overflow: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .editor_content {
+      flex: 1;
+      position: relative;
+      min-width: 0;
+
+      .highlight_layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        // highlight 不自己滚（pointer-events:none 无法触发原生滚动），
+        // 由 input_layer 的 onscroll 编程式同步 scrollTop/scrollLeft。
+        overflow: hidden;
+        z-index: 1;
+        pointer-events: none;
+
+        .editor_row {
+          display: flex;
+          align-items: stretch;
+
+          .line_gutter_cell {
+            flex-shrink: 0;
+            width: 40px;
+            padding: 0 $md-space-sm;
+            text-align: right;
+            color: var(--md-on-surface-variant);
+            user-select: none;
+            -webkit-user-select: none;
+            background: var(--md-paper);
+            border-right: 1px solid var(--md-outline-variant);
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+
+            .line_number {
+              font-size: $md-font-body-sm;
+            }
+          }
+
+          .editor_line {
+            min-height: 1.6em;
+            flex: 1;
+            // padding-left 与 input_layer 的 padding-left 对齐（40px gutter），
+            // padding-right 与 input_layer 的 padding-right 对齐。
+            padding-right: $md-space-md;
+            // white-space 由 RSX inline style 控制（pre / pre-wrap），不在此设。
+          }
+        }
+      }
+
+      .input_layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        // padding 与 highlight_layer 的 gutter(40px) + editor_line padding 对齐，
+        // 保证两层折行宽度一致（scrollHeight 相同）。
+        padding: 0 $md-space-md 0 40px;
+        tab-size: 4;
+        overflow-y: auto;
+        outline: none;
+        border: none;
+        resize: none;
+        caret-color: var(--md-primary);
+        color: transparent;
+        background: transparent;
+        z-index: 3;
+        -webkit-text-fill-color: transparent;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+      }
+    }
+  }
+}
+
+// TODO: 后续启用 fallback tokenizer 时取消注释
+// .token_punctuation {
+//   color: var(--md-on-surface-variant);
+// }
+
+// .token_heading {
+//   color: var(--md-primary);
+//   font-weight: $md-weight-medium;
+// }
+
+// .token_markup {
+//   color: var(--md-on-surface-variant);
+// }
+
+// .token_raw {
+//   color: var(--md-on-surface-variant);
+//   background: var(--md-surface-container);
+//   border-radius: $md-radius-xxs;
+//   padding: 0 2px;
+// }
+
+// .token_label {
+//   color: var(--md-on-surface-variant);
+// }
+
+// .token_error {
+//   color: var(--md-error);
+//   text-decoration: wavy underline;
+//   text-decoration-color: var(--md-error);
+// }
+
+// === LSP 诊断装饰 ===
+
+.diag_error {
+  text-decoration: wavy underline;
+  text-decoration-color: var(--md-error);
+  text-underline-offset: 2px;
+}
+
+.diag_warning {
+  text-decoration: wavy underline;
+  text-decoration-color: var(--token-diag-warning);
+  text-underline-offset: 2px;
+}
+
+.diag_info {
+  text-decoration: dotted underline;
+  text-decoration-color: var(--md-primary);
+  text-underline-offset: 2px;
+}
+
+.diag_hint {
+  text-decoration: dotted underline;
+  text-decoration-color: var(--md-on-surface-variant);
+  text-underline-offset: 2px;
+}
+
+// === 语义 token 类型 ===
+// 配色方案: 22 种 token 各有独立色彩，通过 CSS 变量响应主题切换
+// 浅色/暗色主题色值定义在 app.module.scss 的 .theme-light / .theme-dark 中
+// 按语义族分组:
+//   紫粉系: keyword, modifier, namespace, macro, decorator
+//   蓝色系: function, method, interface
+//   绿色系: string, enum_member, enum
+//   暖色系: variable, type, type_parameter, number, struct
+//   红粉系: parameter, regexp
+//   青色系: property, class
+//   灰色系: comment, operator
+
+// Typst 示例: #set, #show, #import, #let, for, while, if, else, return
+// Markdown 示例: # 标题文本, ## 标题文本, ### 标题文本
+.token_keyword { color: var(--token-keyword); font-weight: $md-weight-medium; }
+
+// Typst 示例: "hello", "world"
+// Markdown 示例: 代码块内容 (```...```)
+.token_string { color: var(--token-string); }
+
+// Typst 示例: // 注释, /* 块注释 */
+// Markdown 示例: > 引用块, --- YAML Front Matter
+.token_comment { color: var(--token-comment); font-style: italic; }
+
+// Typst 示例: page(), text(), grid(), rect()
+// Markdown 示例: [链接文本](url), ![图片alt](url)
+.token_function { color: var(--token-function); }
+
+// Typst 示例: 变量名, 标识符
+// Markdown 示例: 普通段落文本
+.token_variable { color: var(--token-variable); }
+
+// Typst 示例: 函数参数名 (如 page(paper: "a4") 中的 paper)
+.token_parameter { color: var(--token-parameter); }
+
+// Typst 示例: 123, 3.14, 1em, 10pt
+.token_number { color: var(--token-number); }
+
+// Typst 示例: 内容访问 .field, 字典键
+// Markdown 示例: (暂无映射)
+.token_property { color: var(--token-property); }
+
+// Typst 示例: #set text, #show heading (set/show 后的函数名带修饰语)
+.token_modifier { color: var(--token-modifier); }
+
+// Typst 示例: +, -, *, /, ==, !=, <, >, =>, =
+.token_operator { color: var(--token-operator); }
+
+// Typst 示例: type 类型别名
+.token_type { color: var(--token-type); }
+
+// Typst 示例: class 类名
+.token_class { color: var(--token-class); }
+
+// Typst 示例: enum 枚举类型名
+.token_enum { color: var(--token-enum); }
+
+// Typst 示例: enum 成员值
+.token_enum_member { color: var(--token-enum-member); }
+
+// Typst 示例: interface 接口类型名
+.token_interface { color: var(--token-interface); }
+
+// Typst 示例: struct 结构体类型名
+.token_struct { color: var(--token-struct); }
+
+// Typst 示例: 泛型类型参数 <T> 中的 T
+.token_type_parameter { color: var(--token-type-parameter); }
+
+// Typst 示例: namespace 命名空间/模块路径
+.token_namespace { color: var(--token-namespace); }
+
+// Typst 示例: method 方法名
+.token_method { color: var(--token-method); }
+
+// Typst 示例: macro 宏调用
+.token_macro { color: var(--token-macro); }
+
+// Typst 示例: decorator 装饰器/注解
+.token_decorator { color: var(--token-decorator); }
+
+// Typst 示例: 正则表达式字面量
+.token_regexp { color: var(--token-regexp); }
+
+// === 补全弹窗 ===
+
+.completion_popup {
+  position: absolute;
+  z-index: 10;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--md-surface-container);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: $md-radius-sm;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+}
+
+.completion_item {
+  display: flex;
+  align-items: center;
+  padding: 4px $md-space-sm;
+  cursor: pointer;
+  font-size: $md-font-body-sm;
+  line-height: 1.6;
+
+  &:hover,
+  &.active {
+    background: var(--md-surface-container-highest);
+  }
+}
+
+.completion_label {
+  flex: 1;
+  color: var(--md-on-surface);
+}
+
+.completion_detail {
+  font-size: $md-font-body-xs;
+  color: var(--md-on-surface-variant);
+  margin-left: $md-space-sm;
+}
+
+// === 光标信息面板 ===
+
+.cursor_info_panel {
+  position: absolute;
+  z-index: 10;
+  background: var(--md-surface-container);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: $md-radius-sm;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  min-width: 160px;
+  max-width: 300px;
+  overflow: hidden;
+}
+
+.cursor_info_header {
+  display: flex;
+  justify-content: flex-end;
+  padding: $md-space-xs $md-space-xs 0;
+}
+
+.cursor_info_copy_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--md-on-surface-variant);
+  cursor: pointer;
+  padding: $md-space-xs;
+  border-radius: $md-radius-xs;
+  width: 24px;
+  height: 24px;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    background: var(--md-surface-container-high);
+  }
+
+  &:active {
+    background: var(--md-surface-container-highest);
+  }
+}
+
+.cursor_hover_preview {
+  padding: $md-space-sm $md-space-md;
+  font-size: $md-font-body-xs;
+  color: var(--md-on-surface-variant);
+  border-bottom: 1px solid var(--md-outline-variant);
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+// === 诊断信息样式（CursorInfoPanel 使用） ===
+
+.menu_diag_section {
+  padding: $md-space-xs 0;
+  border-bottom: 1px solid var(--md-outline-variant);
+  max-width: 300px;
+}
+
+.diag_msg_icon {
+  margin-right: $md-space-xs;
+  font-weight: $md-weight-medium;
+}
+
+.diag_msg_error {
+  padding: $md-space-xs $md-space-md;
+  font-size: $md-font-body-xs;
+  color: var(--md-error);
+  word-break: break-word;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.diag_msg_warning {
+  padding: $md-space-xs $md-space-md;
+  font-size: $md-font-body-xs;
+  color: var(--token-diag-warning);
+  word-break: break-word;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.diag_msg_info {
+  padding: $md-space-xs $md-space-md;
+  font-size: $md-font-body-xs;
+  color: var(--md-on-surface-variant);
+  word-break: break-word;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.diag_msg_hint {
+  padding: $md-space-xs $md-space-md;
+  font-size: $md-font-body-xs;
+  color: var(--md-on-surface-variant);
+  font-style: italic;
+  word-break: break-word;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+// === 内联提示 ===
+
+// TODO: 后续启用 inlay hint 时取消注释
+// .inlay_hint {
+//   color: var(--md-on-surface-variant);
+//   font-style: italic;
+//   font-size: 0.85em;
+//   opacity: 0.7;
+//   pointer-events: none;
+// }
+
+// === 查找引用面板 ===
+
+.references_panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 40%;
+  background: var(--md-surface-container);
+  border-top: 1px solid var(--md-outline-variant);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.references_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $md-space-sm $md-space-md;
+  border-bottom: 1px solid var(--md-outline-variant);
+  font-size: $md-font-body-sm;
+  font-weight: $md-weight-medium;
+  color: var(--md-on-surface);
+}
+
+.references_close {
+  border: none;
+  background: none;
+  font-size: $md-font-body-md;
+  color: var(--md-on-surface-variant);
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.references_list {
+  flex: 1;
+  overflow-y: auto;
+  padding: $md-space-xs 0;
+}
+
+.references_item {
+  display: flex;
+  align-items: center;
+  padding: $md-space-xs $md-space-md;
+  cursor: pointer;
+  font-size: $md-font-body-sm;
+  color: var(--md-on-surface);
+
+  &:hover {
+    background: var(--md-surface-container-highest);
+  }
+}
+
+.references_line {
+  min-width: 48px;
+  color: var(--md-on-surface-variant);
+  font-size: $md-font-body-xs;
+}
+
+.references_path {
+  color: var(--md-on-surface-variant);
+  font-size: $md-font-body-xs;
+  margin-left: $md-space-sm;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// === 重命名对话框 ===
+
+.rename_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 20;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.rename_dialog {
+  background: var(--md-surface-container);
+  border: 1px solid var(--md-outline-variant);
+  border-radius: $md-radius-md;
+  padding: $md-space-md;
+  min-width: 280px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.rename_label {
+  display: block;
+  font-size: $md-font-body-sm;
+  color: var(--md-on-surface-variant);
+  margin-bottom: $md-space-xs;
+}
+
+.rename_input {
+  width: 100%;
+  padding: $md-space-xs $md-space-sm;
+  border: 1px solid var(--md-outline);
+  border-radius: $md-radius-xs;
+  font-size: $md-font-body-md;
+  font-family: inherit;
+  color: var(--md-on-surface);
+  background: var(--md-surface);
+  outline: none;
+
+  &:focus {
+    border-color: var(--md-primary);
+  }
+}
+
+.rename_actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: $md-space-sm;
+  gap: $md-space-xs;
+}
+
+.rename_cancel {
+  padding: $md-space-xs $md-space-md;
+  border: 1px solid var(--md-outline);
+  border-radius: $md-radius-xs;
+  background: none;
+  font-size: $md-font-body-sm;
+  color: var(--md-on-surface-variant);
+  cursor: pointer;
+}

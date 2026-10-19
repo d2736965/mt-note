@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 外部存储（/sdcard），MANAGE_EXTERNAL_STORAGE 已授权访问 -->
+    <external-path name="external" path="." />
+    <!-- App 专属文件区 -->
+    <files-path name="files" path="." />
+    <cache-path name="cache" path="." />
+    <!-- 根路径，覆盖 /storage、/data 等 -->
+    <root-path name="root" path="." />
+</paths>

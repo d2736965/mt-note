@@ -1,0 +1,70 @@
+.file_changed_dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: $md-space-md;
+
+  .dialog {
+    background: var(--md-surface);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 360px;
+    overflow: clip;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+    .header {
+      padding: $md-space-lg $md-space-lg $md-space-sm;
+      font-size: $md-font-title-md;
+      font-weight: 600;
+      color: var(--md-on-surface);
+    }
+
+    .body {
+      padding: 0 $md-space-lg $md-space-lg;
+      font-size: $md-font-body-md;
+      color: var(--md-on-surface-variant);
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: $md-space-sm;
+      padding: 0 $md-space-md $md-space-md;
+
+      .btn_cancel {
+        padding: 10px 24px;
+        border-radius: 20px;
+        border: 1px solid var(--md-outline);
+        background: transparent;
+        color: var(--md-on-surface);
+        font-size: $md-font-body-md;
+        font-weight: 500;
+        cursor: pointer;
+
+        &:active {
+          background: var(--md-surface-variant);
+        }
+      }
+
+      .btn_reload {
+        padding: 10px 24px;
+        border-radius: 20px;
+        border: none;
+        background: var(--md-primary);
+        color: var(--md-on-primary);
+        font-size: $md-font-body-md;
+        font-weight: 500;
+        cursor: pointer;
+
+        &:active {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}

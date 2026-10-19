@@ -1,0 +1,54 @@
+@mixin icon-btn-base($color) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $md-appbar-icon-btn-size;
+  height: $md-appbar-icon-btn-size;
+  border: none;
+  background: transparent;
+  border-radius: $md-radius-full;
+  cursor: pointer;
+  color: $color;
+  flex-shrink: 0;
+  transition: background-color $md-duration-short $md-easing-standard;
+
+  // hover 反馈只给有真实悬停指针的设备（触摸 WebView 的 hover 会粘在
+  // 触点下的按钮上，抬手不消失，看起来像一直被点过）
+  @media (hover: hover) {
+    &:hover { background-color: rgba(var(--md-on-surface-rgb), 0.08); }
+  }
+  &:active { background-color: rgba(var(--md-on-surface-rgb), 0.12); }
+
+  svg {
+    width: $md-appbar-icon-size;
+    height: $md-appbar-icon-size;
+    fill: currentColor;
+  }
+}
+
+.bottom_app_bar {
+  // 共同外壳
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--md-bottom-appbar-height);
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: var(--md-surface-container);
+  z-index: 100;
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $md-space-xs;
+  padding-left: $md-appbar-horizontal-padding;
+  padding-right: $md-appbar-horizontal-padding;
+  overflow-x: auto;        // 按钮多了水平滚动
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+
+  .action {                // 嵌套在 .bottom_app_bar 内
+    @include icon-btn-base(var(--md-on-surface-variant));
+  }
+}

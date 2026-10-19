@@ -1,0 +1,5 @@
+{
+  // rust-analyzer 的 flycheck 接 lint 全量检查（check.overrideCommand 以项目根为 cwd 运行，相对路径即可）
+  "rust-analyzer.files.exclude": ["dependencies/**", "tmp/**"],
+  "rust-analyzer.check.overrideCommand": ["python3", "lints/scripts/check.py", "--json"]
+}

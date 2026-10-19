@@ -1,0 +1,5 @@
+<!-- 应用名等非翻译常量。可翻译文案的真源在 locales/*.ftl 的 kt- 前缀键，
+     由 build.rs 生成 strings-gen.xml，勿在此手加翻译。 -->
+<resources>
+    <string name="app_name">Mt Note</string>
+</resources>

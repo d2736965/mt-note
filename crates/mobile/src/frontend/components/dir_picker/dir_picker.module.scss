@@ -1,0 +1,163 @@
+.dir_picker {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: $md-space-md;
+}
+
+.dialog {
+  background: var(--md-surface);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  .header {
+    padding: $md-space-md $md-space-lg;
+    font-size: $md-font-title-md;
+    font-weight: 600;
+    color: var(--md-on-surface);
+    border-bottom: 1px solid var(--md-outline-variant);
+  }
+
+  .breadcrumb_bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: $md-space-sm $md-space-md;
+    font-size: $md-font-body-sm;
+    color: var(--md-on-surface-variant);
+    border-bottom: 1px solid var(--md-outline-variant);
+    overflow: auto;
+
+    .crumb_btn {
+      color: var(--md-primary);
+      background: none;
+      border: none;
+      padding: 2px 4px;
+      font-size: inherit;
+      cursor: pointer;
+
+      &:active {
+        opacity: 0.7;
+      }
+    }
+
+    .crumb_sep {
+      opacity: 0.5;
+    }
+
+    .crumb_current {
+      color: var(--md-on-surface);
+      font-weight: 500;
+    }
+  }
+
+  .dir_list {
+    flex: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: $md-space-xs 0;
+    min-height: 160px;
+    max-height: 40vh;
+
+    .entry {
+      display: flex;
+      align-items: center;
+      gap: $md-space-sm;
+      padding: $md-space-sm $md-space-md;
+      font-size: $md-font-body-md;
+      color: var(--md-on-surface);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+
+      &:active {
+        background: var(--md-surface-variant);
+      }
+
+      .entry_icon {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        opacity: 0.7;
+      }
+
+      .entry_name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .empty_hint {
+      padding: $md-space-lg;
+      text-align: center;
+      color: var(--md-on-surface-variant);
+      font-size: $md-font-body-sm;
+    }
+  }
+
+  .current_path {
+    display: flex;
+    align-items: center;
+    gap: $md-space-xs;
+    padding: $md-space-sm $md-space-md;
+    border-top: 1px solid var(--md-outline-variant);
+    font-size: $md-font-body-sm;
+
+    .current_path_label {
+      color: var(--md-on-surface-variant);
+      flex-shrink: 0;
+    }
+
+    .current_path_value {
+      color: var(--md-on-surface);
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .action_row {
+    display: flex;
+    justify-content: flex-end;
+    gap: $md-space-sm;
+    padding: $md-space-sm $md-space-md $md-space-md;
+
+    .btn {
+      padding: $md-space-sm $md-space-lg;
+      font-size: $md-font-body-md;
+      font-weight: 500;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+
+      &.btn_cancel {
+        background: var(--md-surface-variant);
+        color: var(--md-on-surface);
+      }
+
+      &.btn_select {
+        background: var(--md-primary);
+        color: var(--md-on-primary);
+
+        &:active {
+          opacity: 0.85;
+        }
+      }
+    }
+  }
+}
