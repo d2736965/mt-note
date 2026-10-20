@@ -5,7 +5,7 @@
 - 本项目是 Dioxus workspace（构建走 `dx` 命令），命中的规则技能为 **`mt-note-dioxus-workspace-rules`**（技能随项目自带于 `.agents/skills/`，带 `mt-note-` 前缀）。只要适用就加载，保证规则技能在上下文中完整、按需加载；手头工作涉及构建/调试/样式/actor 等专项时，按需再加载对应配套技能（`mt-note-dioxus-android`、`mt-note-cdp` 等）
 - **压缩后立即重载（先做后想）**：感知到上下文压缩（compaction/summarization）完成时，本轮的第一个工具调用就必须是 Skill 加载 `mt-note-dioxus-workspace-rules`，加载完成之前禁止展开任何任务思考；禁止凭压缩摘要残存记忆开工——摘要≠规范全文，残缺记忆继续干活必然违反硬性规则
 - **操作前验证**：执行任何代码操作（编写、修改、审查、构建）前，检查上下文中是否存在 `mt-note-dioxus-workspace-rules` 的 `## 检查清单` 章节；不存在则立即重新加载该技能
-- **Rust 硬性规则**：禁止 `cargo check`，一律用 lint 检查替代（`python lints/scripts/check.py`，即 clippy + dylint 双检）
+- **Rust 硬性规则**：禁止 `cargo check`，一律用 lint 检查替代（`python lints/scripts/check.py`，即 clippy + dylint 双检）；lint 必须先于任何 test 与编译/构建执行，禁止编译后补 lint
 
 ## 终端复用规范
 
@@ -59,6 +59,9 @@ pnpm typecheck        # tsgo 类型检查
 | **调试前置**：[cdp-proxy](https://github.com/d2736965/cdp-proxy)（CDP 多路代理） | WebView devtools 仅单连接，步骤 5 的多客户端调试依赖它 | `pnpm add -g github:d2736965/cdp-proxy`；或任意等价 CDP 多路代理 |
 
 ### 1. Lint 检查（强制 clippy + dylint，禁止 cargo check）
+
+**顺序铁律：lint 强制先于任何 test 与编译/构建执行（`cargo test`、`dx serve`、`dx bundle` 等），lint 全绿后才允许进入后续步骤；禁止先编译/跑测试再补 lint。**
+
 ```bash
 python lints/scripts/check.py               # 全工作区检查，自动检测 target
 python lints/scripts/check.py -p mt-note-mobile  # 检查单个 crate
