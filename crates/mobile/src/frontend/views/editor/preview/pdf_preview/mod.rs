@@ -7,9 +7,11 @@
 //! 数据流：
 //! 1. `use_resource` 异步读取 PDF 字节（spawn_blocking）
 //! 2. 字节就绪后 base64 编码并调用 `load_pdf` JS 函数
-//! 3. JS 端 pdf.js 解析 PDF，按 `scale` 渲染每页到 `<canvas>`
+//! 3. JS 端 pdf.js 解析 PDF，首页尺寸/内容矩形就绪后**立即返回**；
+//!    页面按需渲染（滚动/缩放驱动，只渲染视口附近页，离屏回收 canvas），
+//!    其余占位页由 JS 后台补齐——大文档不再全量渲染撑爆内存
 //! 4. 轮询 `window.__pdfPreview.getPageInfos()` 取得页面尺寸后计算 fit scale
-//! 5. 缩放变化时调用 `set_pdf_scale` 触发重渲染
+//! 5. 缩放变化时调用 `set_pdf_scale` 触发按需重渲染
 //!
 //! 缩放交互完全复用 Typst 预览逻辑：
 //! - 双指捏合：transform 阶段 + 松手后 width = ns * pageW
