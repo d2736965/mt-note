@@ -29,6 +29,13 @@
   ```
 - 模块 SCSS 中**只被 TS 切换**（TS 用字符串 add/remove class，Rust 不引用）的类，选择器必须写 `:global(.xxx)`（嵌套时 `&:global(.xxx)`）。原因：stylance 对普通类生成带哈希的类名 + 同名 Rust 常量——Rust 侧无人用该常量会在 `-D warnings` 下构建失败，且 TS 写的原始类名匹配不上哈希后的选择器。报 `constant ... is never used` 或 TS 类名样式静默失效时先查这里，不要去 Rust 侧加 allow
 
+## 样式规范（明暗主题适配，强制）
+
+- 一切颜色禁止硬编码（`rgba(0,0,0,…)`、`#fff`、`#6750a4` 等十六进制色）：一律使用 `--md-*` 主题 token（`var(--md-primary)`、`var(--md-on-surface)` 等），随明暗主题自动切换——亮色基准 `crates/mobile/assets/styles/theme.scss`，暗色覆盖 `crates/mobile/src/frontend/app.module.scss` 的 `.theme-dark` 类
+- 常用映射：主文字 `--md-on-surface`；次级文字 `--md-on-surface-variant`；边框 `--md-outline`/`--md-outline-variant`；主色底上文字 `--md-on-primary`；error 底上文字 `--md-on-error`；浮层/卡片底 `--md-surface-container*`；半透明覆盖层 `rgba(var(--md-on-surface-rgb), α)`
+- 例外：遮罩与 box-shadow 的黑色（`rgba(0,0,0,α)`）不算硬编码
+- 报「暗色主题下看不见字/图标」类问题时，先查 module.scss 里的硬编码颜色
+
 ## 国际化规范（强制，界面禁止裸字符串）
 
 - **一切用户可见文案禁止硬编码**（RSX 文本、toast/菜单/对话框文案、TS 渲染的工具条提示等）：先在 `crates/mobile/locales/en.ftl` 与 `zh-Hans.ftl` **同步**加键（键集由 build.rs 门禁强制一致，只加一边构建失败），再用取词 API 渲染
