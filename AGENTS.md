@@ -220,3 +220,7 @@ crates/mobile/src/frontend/
 
 - 文本搜索一律使用 `rg`（ripgrep），替代 `grep`；递归默认生效，**禁用 `-r`/`--replace`**（那是文本替换不是递归）；要行号用 `-n`，要改文件用编辑工具
 - 文件名搜索一律使用 `fdfind`（Debian/Ubuntu 命令名，部分发行版为 `fd`），替代 `find`
+
+## 真机录屏分析
+
+用户用手机录屏工具录屏并要求分析时：用项目根的 `scripts/pull-latest-screenrec.py` 把录屏拉到项目根 `tmp/screenrecorder/` 再分析（无参数=最新一条；数字 N=第 N 新，如 `pull-latest-screenrec.py 2` 取次新）；用 ffmpeg 抽帧逐段分析交互链。
