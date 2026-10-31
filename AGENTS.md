@@ -7,6 +7,12 @@
 - **操作前验证**：执行任何代码操作（编写、修改、审查、构建）前，检查上下文中是否存在 `mt-note-dioxus-workspace-rules` 的 `## 检查清单` 章节；不存在则立即重新加载该技能
 - **Rust 硬性规则**：禁止 `cargo check`，一律用 lint 检查替代（`python lints/scripts/check.py`，即 clippy + dylint 双检）；lint 必须先于任何 test 与编译/构建执行，禁止编译后补 lint
 
+## JNI 规范（强制，RegisterNatives 动态注册）
+
+- **禁止用 `Java_*` 静态符号定义 JNI 原生方法**（`#[no_mangle] pub extern "system" fn Java_包名_类名_方法名(...)` 这种 javah 风格导出）
+- **一律走 RegisterNatives 动态注册路线**：在 `JNI_OnLoad`（或项目既有的 JNI 初始化入口）中构造方法表（方法名 + 签名 + 函数指针），通过 `env.register_natives(...)` 完成绑定
+- 原因：`Java_*` 符号名与包名/类名/方法名/重载签名强耦合，任一侧改名即静默断链，运行时才抛 `UnsatisfiedLinkError`；RegisterNatives 在注册期即校验类与方法存在性，绑定错误启动即暴露，且不受 R8 混淆改名影响
+
 ## 终端复用规范
 
 - 执行命令时尽量复用已有终端，最多同时开启 2 个选项卡
