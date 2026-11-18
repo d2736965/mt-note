@@ -1,0 +1,61 @@
+.confirm_dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: $md-space-md;
+
+  .dialog {
+    background: var(--md-surface);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    overflow: clip;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+    .body {
+      padding: $md-space-lg $md-space-lg $md-space-md;
+      font-size: $md-font-body-md;
+      line-height: 1.6;
+      color: var(--md-on-surface);
+    }
+
+    .action_row {
+      display: flex;
+      justify-content: flex-end;
+      gap: $md-space-sm;
+      padding: $md-space-sm $md-space-md $md-space-md;
+
+      .btn_cancel {
+        padding: $md-space-sm $md-space-lg;
+        font-size: $md-font-body-md;
+        font-weight: 500;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        background: var(--md-surface-variant);
+        color: var(--md-on-surface);
+      }
+
+      .btn_confirm {
+        padding: $md-space-sm $md-space-lg;
+        font-size: $md-font-body-md;
+        font-weight: 500;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        background: var(--md-primary);
+        color: var(--md-on-primary);
+
+        &:active {
+          opacity: 0.85;
+        }
+      }
+    }
+  }
+}

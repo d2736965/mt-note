@@ -4,7 +4,7 @@ use dioxus::logger::tracing;
 use dioxus::prelude::*;
 use kameo::actor::ActorRef;
 use manganis::asset;
-use models::{BrowserPrefs, EditorPrefs, GeneralPrefs, OpenMode, StartupTab, Theme, TypstPrefs};
+use models::Theme;
 use ui::hooks::use_app_state::use_app_state;
 use ui::store::app_state::AppState;
 
@@ -21,6 +21,7 @@ use crate::frontend::js_bridge::{DioxusBridge, js_api};
 use crate::frontend::router::Route;
 use crate::frontend::store::bottom_bar_state::BottomBarState;
 use crate::frontend::store::file_opener::{FileOpenerActor, provide_file_opener};
+use crate::frontend::store::prefs;
 use crate::frontend::store::storage::android::{AndroidBackend, AndroidStorage};
 use crate::frontend::store::storage::jni;
 use crate::frontend::store::top_app_bar_state::TopAppBarState;
@@ -109,43 +110,9 @@ pub fn App() -> Element {
         if let Ok(backend) = AndroidBackend::new() {
             let storage = AndroidStorage::new(backend);
             if !theme_loaded() {
-                if let Ok(Some(persisted)) = storage.load::<Theme>() {
-                    state.write().set_theme(persisted);
-                }
-                if let Ok(Some(prefs)) = storage.load::<TypstPrefs>() {
-                    state.write().set_typst_prefs(prefs);
-                }
-                if let Ok(Some(prefs)) = storage.load::<EditorPrefs>() {
-                    state.write().set_editor_prefs(prefs);
-                }
-                if let Ok(Some(mode)) = storage.load::<OpenMode>() {
-                    state.write().set_open_mode(mode);
-                }
-                if let Ok(Some(prefs)) = storage.load::<BrowserPrefs>() {
-                    // 应用持久化的默认目录：仅当 current_dir 仍为初始默认值时覆盖，
-                    // 避免覆盖用户在本次会话中已导航到的新目录。
-                    if let Some(dir) = &prefs.default_dir
-                        && !dir.is_empty()
-                    {
-                        state.write().set_current_dir(dir.into());
-                    }
-                    state.write().set_browser_prefs(prefs);
-                }
-                if let Ok(Some(prefs)) = storage.load::<GeneralPrefs>() {
-                    // 启动页偏好仅在冷启动时应用；会话内切换 tab 不回写。
-                    let tab = match prefs.startup_tab {
-                        StartupTab::Files => 0,
-                        StartupTab::Favorites => 1,
-                    };
-                    state.write().set_active_tab(tab);
-                    state.write().set_general_prefs(prefs);
-                }
-                // 界面语言：显式选择优先，System 跟随系统（JNI 读取，进程内缓存），
-                // 经协商匹配到已注册语言。
-                let lang = i18n_support::resolve_language(&state.read().general_prefs().language);
-                i18n_support::set_language(&mut i18n_ctx, &lang);
-                // TS 侧词典同步（markdown 工具条/灯箱等 JS 动态文案）
-                js_api::i18n::set_locale::<DioxusBridge>(&lang);
+                // 首次进入：从持久化存储加载全部偏好并应用（语言协商、主题
+                // 生效等细节见 prefs::apply_persisted_prefs）
+                prefs::apply_persisted_prefs(&mut state, &storage, &mut i18n_ctx);
                 theme_loaded.set(true);
             } else if let Err(e) = storage.save(state.read().theme()) {
                 tracing::error!("persist theme: {e:?}");

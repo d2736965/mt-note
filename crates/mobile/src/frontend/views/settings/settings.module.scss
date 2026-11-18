@@ -224,6 +224,41 @@
           color: var(--md-on-surface);
         }
       }
+
+      // 备份/恢复双按钮：主色实心（备份）+ 描边（恢复）
+      .backup_actions {
+        display: flex;
+        gap: $md-space-xs;
+        flex-shrink: 0;
+
+        .backup_btn {
+          padding: $md-space-xs $md-space-md;
+          border-radius: $md-radius-full;
+          font-size: $md-font-body-sm;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &.primary {
+            border: none;
+            background-color: var(--md-primary);
+            color: var(--md-on-primary);
+
+            &:active {
+              opacity: 0.85;
+            }
+          }
+
+          &.secondary {
+            border: 1px solid var(--md-outline);
+            background: transparent;
+            color: var(--md-on-surface);
+
+            &:active {
+              background-color: rgba(var(--md-on-surface-rgb), 0.08);
+            }
+          }
+        }
+      }
     }
 
     .font_path_item {

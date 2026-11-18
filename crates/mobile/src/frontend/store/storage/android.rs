@@ -44,6 +44,21 @@ impl AndroidBackend {
     pub fn files_dir(&self) -> &Path {
         &self.files_dir
     }
+
+    /// 读取 persist.json 原始键值表（备份导出用）。
+    ///
+    /// 文件不存在或损坏返回空表，与 [`StorageBackend::load_raw`] 语义一致。
+    pub fn read_raw_config(&self) -> Result<HashMap<String, String>, AndroidStorageError> {
+        read_config(&self.files_dir)
+    }
+
+    /// 整表写回 persist.json（备份恢复用），覆盖现有文件内容。
+    pub fn write_raw_config(
+        &self,
+        config: &HashMap<String, String>,
+    ) -> Result<(), AndroidStorageError> {
+        write_config(&self.files_dir, config)
+    }
 }
 
 impl StorageBackend for AndroidBackend {

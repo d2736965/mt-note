@@ -123,10 +123,17 @@ common-unnamed = 未命名
 common-unknown-error = 未知错误
 common-return = 返回
 common-home = 首页
-common-license = 许可证
 
 # 关于页
 about-desc = 轻量级 Markdown / Typst 笔记应用
+about-repo = 仓库地址
+about-oss-licenses = 开源许可
+
+# 开源许可页
+licenses-desc = 本应用基于以下第三方开源项目构建
+licenses-loading = 正在加载许可清单...
+licenses-empty = 条目不存在
+err-licenses-load = 许可清单加载失败：{$e}
 
 # 编辑器错误页
 err-editor-title = 编辑器渲染错误
@@ -188,6 +195,19 @@ settings-section-typst = Typst 编译
 settings-font-paths = 字体搜索路径
 settings-font-paths-desc = Typst 编译时搜索字体的目录
 settings-font-path-placeholder = 输入字体目录路径
+settings-section-backup = 备份与恢复
+settings-backup = 备份应用数据
+settings-backup-desc = 将收藏与全部设置导出为 JSON 文件；建议放入同步目录，重装或换设备后可恢复
+settings-backup-btn = 备份
+settings-restore-btn = 恢复
+settings-restore-pick = 选择备份文件
+settings-restore-no-json = 此目录下没有 .json 备份文件
+settings-restore-confirm = 恢复将覆盖当前的收藏与全部设置，确定继续吗？
+settings-backup-done = 备份已保存：{$path}
+settings-restored = 已恢复 {$count} 项
+err-backup-write = 备份失败：{$e}
+err-restore-read = 读取备份失败：{$e}
+err-restore-format = 不是有效的 mt-note 备份文件：{$e}
 
 # 错误变体翻译（i18n/localize.rs，底层 Display 已英文化）
 err-fs-walk = 目录遍历失败 {path}: {source}

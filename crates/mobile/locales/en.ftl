@@ -124,10 +124,17 @@ common-unnamed = Untitled
 common-unknown-error = Unknown error
 common-return = Back
 common-home = Home
-common-license = License
 
 # About page
 about-desc = A lightweight Markdown / Typst note-taking app
+about-repo = Repository
+about-oss-licenses = Open-source licenses
+
+# Open-source licenses page
+licenses-desc = This app is built upon the following third-party open-source projects
+licenses-loading = Loading licenses...
+licenses-empty = Entry not found
+err-licenses-load = Failed to load licenses: {$e}
 
 # Editor error page
 err-editor-title = Editor rendering error
@@ -189,6 +196,19 @@ settings-section-typst = Typst compilation
 settings-font-paths = Font search paths
 settings-font-paths-desc = Directories searched for fonts during Typst compilation
 settings-font-path-placeholder = Enter a font directory path
+settings-section-backup = Backup & restore
+settings-backup = Back up app data
+settings-backup-desc = Export favorites and all settings to a JSON file; keep it in a synced folder to restore after reinstall or on another device
+settings-backup-btn = Backup
+settings-restore-btn = Restore
+settings-restore-pick = Choose a backup file
+settings-restore-no-json = No .json backup file in this folder
+settings-restore-confirm = Restoring will overwrite current favorites and all settings. Continue?
+settings-backup-done = Backup saved: {$path}
+settings-restored = Restored {$count} items
+err-backup-write = Backup failed: {$e}
+err-restore-read = Failed to read backup: {$e}
+err-restore-format = Not a valid mt-note backup file: {$e}
 
 # Error variant translations (i18n/localize.rs; underlying Displays are English)
 err-fs-walk = Failed to walk directory {path}: {source}

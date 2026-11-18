@@ -21,7 +21,7 @@ fn breadcrumbs_of(path: &Path) -> Vec<Crumb> {
         let name = current
             .file_name()
             .and_then(|n| n.to_str())
-            .unwrap_or("/")
+            .unwrap_or("")
             .to_string();
         if name.is_empty() {
             break;

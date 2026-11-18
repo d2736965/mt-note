@@ -17,7 +17,9 @@
     font-size: $md-font-body-sm;
     border-radius: $md-radius-sm;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    white-space: nowrap;
+    max-width: min(85vw, 32rem);
+    text-align: center;
+    overflow-wrap: anywhere;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     pointer-events: auto;
