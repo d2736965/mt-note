@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   height: var(--md-bottom-appbar-height);
-  padding-bottom: env(safe-area-inset-bottom);
+  // 底部避让由原生层统一 padding，勿加 env(safe-area-inset-bottom)：WebView 136+ 非 0，双重叠加
   background-color: var(--md-surface-container);
   z-index: 100;
   box-sizing: content-box;

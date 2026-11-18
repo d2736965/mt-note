@@ -101,7 +101,9 @@
   width: 100%;
   max-width: 100%;
   overflow: clip;
-  padding-top: calc(env(safe-area-inset-top) + var(--md-appbar-height));
+  // 系统栏避让由原生层统一 padding（MainActivity setupKeyboardResize），
+  // 勿加 env(safe-area-inset-*)：WebView 136+ 起其值非 0，会与原生 padding 双重叠加
+  padding-top: var(--md-appbar-height);
   background-color: var(--md-surface);
   color: var(--md-on-surface);
   transition:
@@ -112,7 +114,7 @@
   box-sizing: border-box;
 
   &.has_bottom_bar {
-    padding-bottom: calc(var(--md-bottom-appbar-height) + env(safe-area-inset-bottom));
+    padding-bottom: var(--md-bottom-appbar-height);
   }
 }
 

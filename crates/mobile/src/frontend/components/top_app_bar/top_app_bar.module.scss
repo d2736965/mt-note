@@ -35,10 +35,11 @@
   top: 0;
   left: 0;
   right: 0;
-  height: calc(var(--md-appbar-height) + env(safe-area-inset-top));
+  // 系统栏避让由原生层统一 padding（MainActivity setupKeyboardResize），
+  // 勿加 env(safe-area-inset-*)：WebView 136+ 起其值非 0，会与原生 padding 双重叠加
+  height: var(--md-appbar-height);
   padding-left: $md-appbar-horizontal-padding;
   padding-right: $md-appbar-horizontal-padding;
-  padding-top: env(safe-area-inset-top);
   background-color: var(--md-surface-container);
   z-index: 100;
   transition: background-color 0.3s ease;

@@ -461,7 +461,8 @@
   :global(.md-lightbox-toolbar) {
     position: absolute;
     left: 50%;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    // 底部避让由原生层统一 padding，勿加 env(safe-area-inset-bottom)：WebView 136+ 非 0，双重叠加
+    bottom: 16px;
     display: flex;
     align-items: center;
     gap: 2px;
