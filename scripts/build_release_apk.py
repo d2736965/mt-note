@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """构建 release APK 并用 apksigner 签名。
 
+签名成品输出到 tmp/apk/mt-note-v<版本>.apk（版本取自工作区根 Cargo.toml
+的 [workspace.package] version，与关于页/安卓 versionName 同源）。
+
 用法:
     python scripts/build_release_apk.py -p <password> -k <keystore路径> -a <alias>           # 构建 + 签名
     python scripts/build_release_apk.py -p <password> -k <keystore路径> -a <alias> --sign-only <apk>  # 仅签名
@@ -11,6 +14,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -18,6 +22,12 @@ APK_GLOB = str(
     ROOT / "target" / "dx" / "mt-note-mobile" / "release" / "android" / "**" / "*.apk"
 )
 OUTPUT_DIR = ROOT / "tmp" / "apk"
+
+
+def read_version() -> str:
+    """应用版本唯一真源：工作区根 Cargo.toml 的 [workspace.package] version。"""
+    with (ROOT / "Cargo.toml").open("rb") as f:
+        return tomllib.load(f)["workspace"]["package"]["version"]
 
 
 def find_apk(explicit: str | None) -> Path:
@@ -67,7 +77,7 @@ def sign_apk(apk: Path, keystore: Path, alias: str, password: str) -> Path:
     apksigner = find_apksigner()
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    output = OUTPUT_DIR / apk.name
+    output = OUTPUT_DIR / f"mt-note-v{read_version()}.apk"
 
     print(f"• keystore: {keystore}")
     print(f"• alias:    {alias}")
