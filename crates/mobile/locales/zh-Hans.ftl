@@ -133,6 +133,7 @@ about-oss-licenses = 开源许可
 licenses-desc = 本应用基于以下第三方开源项目构建
 licenses-loading = 正在加载许可清单...
 licenses-empty = 条目不存在
+licenses-view-online = 该依赖未附带许可文本，点击查看公共许可证原文：
 err-licenses-load = 许可清单加载失败：{$e}
 
 # 编辑器错误页

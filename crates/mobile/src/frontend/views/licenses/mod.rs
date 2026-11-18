@@ -1,8 +1,9 @@
-//! 开源许可页：本应用依赖的第三方开源库清单与授权全文。
+//! 开源许可页：本应用依赖的第三方开源库清单与授权信息。
 //!
-//! 数据由 `cargo about`（配置见工作区根 `about.toml`）对 Rust 依赖生成，
-//! 并入 JS 运行时依赖（pdf.js、katex 等）后固化为 `third_party.json`，
-//! 依赖变化时重新生成即可，构建不依赖 cargo-about。
+//! 数据由工作区 `scripts/gen_licenses.py` 在构建期扫描（mobile/build.rs
+//! 调用，白名单外许可门禁失败即编译失败），写入 `OUT_DIR/third_party.json`
+//! 供本页 include_str!。上游附带全文的条目内嵌全文；未附带的条目给出
+//! 公共许可证原文链接（spdx.org，经系统浏览器打开）。
 
 use dioxus::logger::tracing;
 use dioxus::prelude::*;
@@ -17,10 +18,12 @@ use ui::components::icons::ChevronRightIcon;
 
 stylance::import_style!(styles, "licenses.module.scss");
 
-/// 第三方许可清单（构建期固化的 JSON 数组，随源码提交）。
-const THIRD_PARTY_JSON: &str = include_str!("third_party.json");
+/// 第三方许可清单（构建产物，由 build.rs 生成到 OUT_DIR，不入源码）。
+const THIRD_PARTY_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/third_party.json"));
 
-/// 一条依赖的许可信息（全文在 `licenses[text_idx]`，数百依赖共享同一份文本）。
+/// 一条依赖的许可信息：`text_idx` 指向全文池（上游附带文本的条目，数百
+/// 依赖共享同一份文本）；未附带全文的条目以 `license_ids` 列出许可 id，
+/// UI 据此给出公共许可证原文链接。
 #[derive(Clone, Deserialize)]
 struct LicenseEntry {
     name: String,
@@ -28,7 +31,10 @@ struct LicenseEntry {
     license: String,
     #[serde(default)]
     repository: String,
-    text_idx: usize,
+    #[serde(default)]
+    text_idx: Option<usize>,
+    #[serde(default)]
+    license_ids: Vec<String>,
 }
 
 /// 内嵌清单文档：全文池 + 条目列表。
@@ -74,9 +80,9 @@ pub fn Licenses() -> Element {
                     Some(idx) => match doc.entries.get(idx) {
                         Some(entry) => {
                             let entry = entry.clone();
-                            let text = doc
-                                .licenses
-                                .get(entry.text_idx)
+                            let text = entry
+                                .text_idx
+                                .and_then(|i| doc.licenses.get(i))
                                 .cloned()
                                 .unwrap_or_default();
                             rsx! {
@@ -99,7 +105,31 @@ pub fn Licenses() -> Element {
                                             ChevronRightIcon { class: styles::repo_chevron }
                                         }
                                     }
-                                    pre { class: styles::license_text, "{text}" }
+                                    if !text.is_empty() {
+                                        pre { class: styles::license_text, "{text}" }
+                                    } else if !entry.license_ids.is_empty() {
+                                        // 上游未附带全文：给公共许可证原文链接
+                                        div { class: styles::license_links,
+                                            div { class: styles::link_hint,
+                                                { i18n_support::translate(&i18n_ctx, "licenses-view-online") }
+                                            }
+                                            for id in entry.license_ids.iter().cloned() {
+                                                button {
+                                                    key: "{id}",
+                                                    class: styles::license_link,
+                                                    onclick: move |_| {
+                                                        let url = format!("https://spdx.org/licenses/{id}.html");
+                                                        // 无浏览器等异常由原生层捕获记日志
+                                                        if let Err(e) = jni::open_url(&url) {
+                                                            tracing::error!("open_url({url}): {e}");
+                                                        }
+                                                    },
+                                                    span { class: styles::license_link_name, "{id}" }
+                                                    ChevronRightIcon { class: styles::license_link_chevron }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

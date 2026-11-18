@@ -134,6 +134,7 @@ about-oss-licenses = Open-source licenses
 licenses-desc = This app is built upon the following third-party open-source projects
 licenses-loading = Loading licenses...
 licenses-empty = Entry not found
+licenses-view-online = This dependency ships no license text — tap a license to view the canonical text online:
 err-licenses-load = Failed to load licenses: {$e}
 
 # Editor error page

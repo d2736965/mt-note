@@ -8,14 +8,15 @@
   NPM    crates/mobile/ts/package.json 的 dependencies，
          许可与全文读自 node_modules/<pkg>/；
   Kotlin target/dx 下 Android 工程的 debugRuntimeClasspath 完整依赖树
-         （含传递依赖，经 gradlew 解析），许可读自 ~/.gradle 缓存的 POM，
-         全文用本仓库内置的规范文本（Apache/MIT 取 LICENSE-*，BSD 内置）。
+         （含传递依赖，经 gradlew 解析），许可读自 ~/.gradle 缓存的 POM。
 
-用法（项目根下）：scripts/gen_licenses.py
-产物：crates/mobile/src/frontend/views/licenses/third_party.json
-      （随源码提交；依赖变化后重跑本脚本即可）
+用法（项目根下）：scripts/gen_licenses.py [--out PATH] [--force]
+产物：第三方许可清单 JSON，属构建产物不入源码——默认写 target/
+      gen_licenses.json 缓存；构建期由 mobile/build.rs 传 --out 复制到
+      OUT_DIR 供许可页 include_str!。上游附带全文的条目内嵌全文；未
+      附带的只记许可 id（license_ids），UI 据此给公共许可证原文链接。
 门禁时机：crates/mobile/build.rs 在构建期自动调用本脚本（触发列表负责
-      "唤醒"：Cargo.lock/Dioxus.toml/NPM 锁文件/本脚本/规范文本任一变化
+      "唤醒"：Cargo.lock/Dioxus.toml/NPM 锁文件/本脚本任一变化
       时 build.rs 重跑）；本脚本再对输入指纹戳对账，无变化 50ms 跳过，
       有变化才全量扫描。白名单外许可直接导致编译失败（build.rs 检查
       退出码）。手动重扫加 --force。
@@ -49,14 +50,10 @@ ALLOWED = {
     "bzip2-1.0.6",
 }
 
-# 许可全文规范化：SPDX id -> 规范全文。gradle POM 只有许可名没有全文，
-# 发布包缺 LICENSE 文件的 crate 也需兜底；规范文本存 scripts/licenses/
-# <SPDX id>.txt（占位署名形式，与本仓库自身署名解耦），缺哪个 id 补哪个文件。
 ROOT = Path(__file__).resolve().parent.parent
-BUILTIN_TEXTS = {
-    f.stem: f.read_text(encoding="utf-8")
-    for f in (ROOT / "scripts/licenses").glob("*.txt")
-}
+# 依赖未附带许可文本时（发布包缺 LICENSE 文件、gradle POM 只有许可名），
+# 条目不嵌全文，只记录许可 id 列表；UI 据此给出公共许可证原文链接
+# （https://spdx.org/licenses/<id>.html），文本实体不进源码。
 
 # gradle POM <license><name> 常见写法 -> SPDX id
 POM_NAME_TO_SPDX = {
@@ -74,13 +71,14 @@ POM_NAME_TO_SPDX = {
 }
 
 MOBILE_PKG = "mt-note-mobile"
-OUT_PATH = ROOT / "crates/mobile/src/frontend/views/licenses/third_party.json"
 TS_DIR = ROOT / "crates/mobile/ts"
 # target/dx 下 Android gradle 工程目录（dx bundle 生成；gradlew 在 app/ 层）
 ANDROID_DIR = ROOT / f"target/dx/{MOBILE_PKG}/debug/android"
 GRADLE_DIR = ANDROID_DIR / "app"
-# 输入指纹戳（target/ 不入库，构建间持久）：本脚本被 cargo/build.rs 频繁
-# 唤醒（触发列表粗粒度），是否真需要全量扫描由这里的指纹对账裁决
+# 扫描结果缓存（target/ 不入库，构建间持久、各 OUT_DIR 共享）+ 输入指纹戳：
+# 本脚本被 cargo/build.rs 频繁唤醒（触发列表粗粒度），是否真需要全量扫描
+# 由这里的指纹对账裁决
+CACHE_PATH = ROOT / "target" / "gen_licenses.json"
 STAMP_PATH = ROOT / "target" / "gen_licenses.stamp"
 
 # 扫描结果依赖的全部输入（新增输入须同时进此列表与 build.rs 触发列表；
@@ -92,7 +90,6 @@ STAMP_INPUTS = [
     TS_DIR / "pnpm-lock.yaml",
     ROOT / "about.toml",
     ROOT / "scripts/gen_licenses.py",
-    *sorted((ROOT / "scripts/licenses").glob("*.txt")),
 ]
 
 
@@ -137,6 +134,15 @@ def spdx_tokens(expr: str) -> list[str]:
         t = m.group(0).strip()
         if t not in ("AND", "OR", "WITH") and not t.startswith(("AND", "OR")):
             out.append(t)
+    return sorted(set(out))
+
+
+def spdx_ids(expr: str) -> list[str]:
+    """展开 SPDX 表达式为去重许可 id 列表（剥 AND/OR/括号，WITH 异常单独
+    成项），供无全文条目生成公共许可证原文链接。"""
+    out: list[str] = []
+    for tok in spdx_tokens(expr):
+        out.extend(p.strip() for p in re.split(r"\s+WITH\s+", tok))
     return sorted(set(out))
 
 
@@ -192,7 +198,7 @@ def collect_rust() -> list[dict]:
     data = json.loads(Path(raw_path).read_text(encoding="utf-8"))
     Path(raw_path).unlink(missing_ok=True)
 
-    entries, no_text = [], []
+    entries = []
     for item in data["crates"]:
         pkg = item["package"]
         # source 为空的包是 workspace 成员（我们自己的 crate），不进第三方清单
@@ -200,27 +206,15 @@ def collect_rust() -> list[dict]:
             continue
         src_dir = Path(pkg["manifest_path"]).parent
         text = read_license_texts(src_dir)
-        if not text:
-            # 发布包不带 LICENSE 文件的 crate：选一个全部成员都有内置规范
-            # 文本的 OR 分支兜底（MIT/Apache/BSD 等文本各持有者通用）
-            expr = pkg.get("license") or ""
-            for branch in _spdx_split(expr, "OR"):
-                toks = [t.strip() for t in _spdx_split(branch, "AND")]
-                if toks and all(t in BUILTIN_TEXTS for t in toks):
-                    text = "\n\n-----\n\n".join(BUILTIN_TEXTS[t] for t in toks)
-                    break
-            if not text:
-                no_text.append(f"{pkg['name']} {pkg['version']}")
         entries.append({
             "name": pkg["name"],
             "version": pkg["version"],
             "license": pkg.get("license") or "(未声明)",
             "repository": pkg.get("repository") or "",
-            "text": text,
+            "text": text or None,
+            "license_ids": [] if text else spdx_ids(pkg.get("license") or ""),
             "source": "rust",
         })
-    if no_text:
-        print(f"[警告] Rust 依赖未找到许可全文：{', '.join(no_text)}")
     return entries
 
 
@@ -255,7 +249,8 @@ def collect_npm() -> list[dict]:
             "version": info.get("version", ""),
             "license": lic,
             "repository": repo_url,
-            "text": text,
+            "text": text or None,
+            "license_ids": [] if text else spdx_ids(lic),
             "source": "npm",
         })
     if missing:
@@ -352,16 +347,16 @@ def collect_gradle() -> list[dict]:
         spdx = pom_license(coord) or group_license(coord)
         if spdx is None:
             unknown.append(coord)
-            text, lic = "", "(未声明)"
+            lic, ids = "(未声明)", []
         else:
-            lic = spdx
-            text = BUILTIN_TEXTS.get(spdx, "")
+            lic, ids = spdx, [spdx]
         entries.append({
             "name": coord.rsplit(":", 1)[0],  # group:artifact（版本另列）
             "version": coord.split(":")[-1],
             "license": lic,
             "repository": "",
-            "text": text,
+            "text": None,
+            "license_ids": ids,
             "source": "gradle",
         })
     if unknown:
@@ -372,12 +367,30 @@ def collect_gradle() -> list[dict]:
 
 # ===== 汇总与门禁 =====
 
+def sync_out(src: Path, dst: Path | None) -> None:
+    """把扫描结果对齐到构建方要求的输出路径（如 OUT_DIR/third_party.json）；
+    内容不变不重写，避免 mtime 抖动经 include_str! 触发无谓重编译。"""
+    if dst is None or src.resolve() == dst.resolve():
+        return
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        if dst.is_file() and dst.read_text(encoding="utf-8") == src.read_text(encoding="utf-8"):
+            return
+    except OSError:
+        pass
+    dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+
+
 def main() -> int:
-    # 指纹对账：输入无变化则跳过扫描（--force 强制全量）。扫描失败不写戳，
+    out_path = Path(sys.argv[sys.argv.index("--out") + 1]) if "--out" in sys.argv else None
+    # 指纹对账：输入无变化则跳过扫描（--force 强制全量），只把缓存对齐到
+    # --out（OUT_DIR 被清理或新 profile 时无需重扫）。扫描失败不写戳，
     # 下次构建自动重试
     fingerprint = stamp_fingerprint()
     if "--force" not in sys.argv and STAMP_PATH.is_file() \
-            and STAMP_PATH.read_text(encoding="utf-8") == fingerprint:
+            and STAMP_PATH.read_text(encoding="utf-8") == fingerprint \
+            and CACHE_PATH.is_file():
+        sync_out(CACHE_PATH, out_path)
         print("[跳过] 许可输入无变化（--force 可强制重扫）")
         return 0
 
@@ -390,7 +403,7 @@ def main() -> int:
     by_key: dict[tuple, dict] = {}
     for e in all_entries:
         key = (e["source"], e["name"], e["version"])
-        if key not in by_key or len(e["text"]) > len(by_key[key]["text"]):
+        if key not in by_key or len(e.get("text") or "") > len(by_key[key].get("text") or ""):
             by_key[key] = e
     entries = sorted(by_key.values(), key=lambda e: (e["source"], e["name"]))
 
@@ -401,11 +414,15 @@ def main() -> int:
     out_entries = []
     for e in entries:
         t = e["text"]
-        if t not in pool_idx:
-            pool_idx[t] = len(pool)
-            pool.append(t)
-        d = {k: v for k, v in e.items() if k != "text"}
-        d["text_idx"] = pool_idx[t]
+        d = {k: v for k, v in e.items() if k not in ("text", "license_ids")}
+        if t:
+            if t not in pool_idx:
+                pool_idx[t] = len(pool)
+                pool.append(t)
+            d["text_idx"] = pool_idx[t]
+        elif e["license_ids"]:
+            # 未附带全文：记录许可 id，UI 据此给公共许可证原文链接
+            d["license_ids"] = e["license_ids"]
         out_entries.append(d)
     doc = {"licenses": pool, "entries": out_entries}
 
@@ -418,23 +435,25 @@ def main() -> int:
             print(f"  {b}  <-  {', '.join(owners)}")
         return 1
 
-    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
     body = json.dumps(doc, ensure_ascii=False, indent=1) + "\n"
     # 内容不变不重写：本脚本由 mobile/build.rs 在构建期调用，无条件重写会
     # 抖动 mtime，触发 include_str! 此产物的 crate 无谓重编译
-    old = OUT_PATH.read_text(encoding="utf-8") if OUT_PATH.is_file() else None
+    old = CACHE_PATH.read_text(encoding="utf-8") if CACHE_PATH.is_file() else None
     if old != body:
-        OUT_PATH.write_text(body, encoding="utf-8")
+        CACHE_PATH.write_text(body, encoding="utf-8")
+    sync_out(CACHE_PATH, out_path)
     # 扫描成功才落指纹戳；门禁失败不落，下次构建自动重试
     STAMP_PATH.parent.mkdir(parents=True, exist_ok=True)
     STAMP_PATH.write_text(fingerprint, encoding="utf-8")
     counts = {}
     for e in entries:
         counts[e["source"]] = counts.get(e["source"], 0) + 1
-    size_kb = OUT_PATH.stat().st_size // 1024
+    size_kb = CACHE_PATH.stat().st_size // 1024
+    dest = f"，输出 -> {out_path}" if out_path else ""
     print(f"[完成] 共 {len(entries)} 条（Rust {counts.get('rust', 0)} / "
           f"NPM {counts.get('npm', 0)} / gradle {counts.get('gradle', 0)}），"
-          f"{size_kb} KB -> {OUT_PATH.relative_to(ROOT)}")
+          f"{size_kb} KB -> {CACHE_PATH.relative_to(ROOT)}{dest}")
     return 0
 
 

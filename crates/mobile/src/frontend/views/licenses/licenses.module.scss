@@ -136,5 +136,41 @@
       word-break: break-word;
       user-select: text;
     }
+
+    .license_links {
+      display: flex;
+      flex-direction: column;
+      gap: $md-space-xs;
+
+      .link_hint {
+        font-size: $md-font-body-sm;
+        color: var(--md-on-surface-variant);
+      }
+
+      .license_link {
+        display: flex;
+        align-items: center;
+        gap: $md-space-sm;
+        width: 100%;
+        padding: $md-space-sm $md-space-md;
+        border: none;
+        border-radius: $md-radius-md;
+        background: var(--md-surface-container);
+        text-align: left;
+        cursor: pointer;
+
+        .license_link_name {
+          flex: 1;
+          min-width: 0;
+          font-size: $md-font-body-sm;
+          color: var(--md-primary);
+        }
+
+        .license_link_chevron {
+          flex-shrink: 0;
+          color: var(--md-on-surface-variant);
+        }
+      }
+    }
   }
 }
