@@ -51,6 +51,7 @@ datetime-short = MM月dd日 HH:mm
 
 
 # 通用
+common-license = 许可证
 common-app-state-error = 应用状态加载失败
 common-rename = 重命名
 common-cancel = 取消
@@ -126,7 +127,7 @@ common-home = 首页
 
 # 关于页
 about-desc = 轻量级 Markdown / Typst 笔记应用
-about-repo = 仓库地址
+about-source-code = 源码地址
 about-oss-licenses = 开源许可
 
 # 开源许可页

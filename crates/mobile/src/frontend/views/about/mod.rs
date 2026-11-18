@@ -1,7 +1,7 @@
 use dioxus::logger::tracing;
 use dioxus::prelude::*;
 use dioxus_i18n::prelude::i18n;
-use ui::components::icons::ChevronRightIcon;
+use ui::components::icons::{CodeIcon, DescriptionIcon};
 
 use crate::frontend::hooks::use_top_app_bar_state::use_top_app_bar_state;
 use crate::frontend::i18n as i18n_support;
@@ -11,9 +11,8 @@ use crate::frontend::store::top_app_bar_state::MenuItem;
 stylance::import_style!(about_styles, "about.module.scss");
 
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
-/// 源码仓库地址（关于页展示简称，点按经原生浏览器打开完整 URL）。
+/// 源码仓库地址（关于页「源码地址」行点按经原生浏览器打开）。
 const REPO_URL: &str = "https://github.com/d2736965/mt-note";
-const REPO_URL_SHORT: &str = "github.com/d2736965/mt-note";
 
 #[component]
 pub fn About() -> Element {
@@ -40,27 +39,33 @@ pub fn About() -> Element {
             p { class: about_styles::description, { i18n_support::translate(&i18n_ctx, "about-desc") } }
             div { class: about_styles::license_section,
                 button {
-                    class: about_styles::license_row,
+                    class: about_styles::row,
                     onclick: move |_| {
                         // 无浏览器等异常由原生层捕获记日志，这里只需感知失败
                         if let Err(e) = jni::open_url(REPO_URL) {
                             tracing::error!("open_url({REPO_URL}): {e}");
                         }
                     },
-                    span { class: about_styles::license_label, { i18n_support::translate(&i18n_ctx, "about-repo") } }
-                    span { class: about_styles::license_value, "{REPO_URL_SHORT}" }
-                    ChevronRightIcon { class: about_styles::license_chevron }
+                    CodeIcon { class: about_styles::row_icon }
+                    span { class: about_styles::row_label, { i18n_support::translate(&i18n_ctx, "about-source-code") } }
                 }
+                div { class: about_styles::divider }
                 button {
-                    class: about_styles::license_row,
+                    class: about_styles::row,
                     onclick: move |_| {
                         nav.push("/licenses");
                     },
-                    span { class: about_styles::license_label, { i18n_support::translate(&i18n_ctx, "about-oss-licenses") } }
-                    ChevronRightIcon { class: about_styles::license_chevron }
+                    DescriptionIcon { class: about_styles::row_icon }
+                    span { class: about_styles::row_label, { i18n_support::translate(&i18n_ctx, "about-oss-licenses") } }
                 }
             }
-            p { class: about_styles::footer, "© The MtNote Project Contributors" }
+            button {
+                class: about_styles::footer,
+                onclick: move |_| {
+                    nav.push("/license");
+                },
+                "© The MtNote Project Contributors"
+            }
         }
     }
 }

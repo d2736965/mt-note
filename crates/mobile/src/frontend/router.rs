@@ -5,6 +5,7 @@ use crate::frontend::views::about::About;
 use crate::frontend::views::editor::Editor;
 use crate::frontend::views::editor_error::EditorError;
 use crate::frontend::views::home::Home;
+use crate::frontend::views::license::License;
 use crate::frontend::views::licenses::Licenses;
 use crate::frontend::views::settings::Settings;
 
@@ -31,4 +32,7 @@ pub enum Route {
         /// 开源许可（依赖库列表与授权全文）
         #[route("/licenses")]
         Licenses {},
+        /// 本应用许可（MIT / Apache-2.0 双许可全文）
+        #[route("/license")]
+        License {},
 }

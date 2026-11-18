@@ -52,6 +52,7 @@ datetime-date = yyyy-MM-dd
 datetime-short = MM-dd HH:mm
 
 # Common
+common-license = License
 common-app-state-error = Failed to load app state
 common-rename = Rename
 common-cancel = Cancel
@@ -127,7 +128,7 @@ common-home = Home
 
 # About page
 about-desc = A lightweight Markdown / Typst note-taking app
-about-repo = Repository
+about-source-code = Source code
 about-oss-licenses = Open-source licenses
 
 # Open-source licenses page
