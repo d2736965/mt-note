@@ -2,6 +2,8 @@ fn main() {
     let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR not set");
     let out_dir = std::env::var("OUT_DIR").expect("OUT_DIR not set");
 
+    check_licenses(&manifest_dir);
+
     let stylance_config = stylance_cli::Config::load(manifest_dir.clone().into())
         .expect("Failed to load stylance config");
     stylance_cli::run(&stylance_config).expect("Stylance failed");
@@ -38,6 +40,53 @@ fn main() {
     }
 
     declare_rerun_deps(&manifest_dir, &ts_dir);
+}
+
+/// 开源许可门禁：执行 scripts/gen_licenses.py 扫描全部依赖（Rust/NPM/
+/// gradle 三路）许可。出现白名单外许可时脚本退出非零，构建随之失败——
+/// 不合规依赖在编译期即被拦下。产物 third_party.json 由本 crate
+/// `include_str!`（开源许可页数据），内容不变不重写，无 mtime 抖动。
+///
+/// 触发时机（cargo 指纹缓存，其余编译不重跑、零开销）：
+/// - `Cargo.lock`：上游 Rust 依赖增删/升级的唯一信号
+/// - `Dioxus.toml`：gradle 额外依赖（android.gradle_dependencies）的真源
+/// - `ts/package.json`/`pnpm-lock.yaml`：NPM 依赖（已在 declare_rerun_deps
+///   声明，build.rs 重跑时本函数随之执行）
+/// - 扫描脚本/规范许可文本/门禁配置被编辑：脚本自身的输入变化
+///
+/// 已知边界：dx CLI 模板注入的 gradle 依赖（androidx.webkit/appcompat/
+/// material 等，随 CLI 二进制内置模板走）在仓库内无信号文件，升级 dx CLI
+/// 后需手动 `python3 scripts/gen_licenses.py --force` 重扫一次。
+fn check_licenses(manifest_dir: &str) {
+    // 工作区根：crates/mobile 的上两级
+    let workspace = std::path::Path::new(manifest_dir)
+        .parent()
+        .unwrap_or_else(|| unreachable!("manifest_dir {manifest_dir} 缺上级目录"))
+        .parent()
+        .unwrap_or_else(|| unreachable!("crates 目录缺上级目录"));
+
+    println!("cargo:rerun-if-changed={manifest_dir}/../../Cargo.lock");
+    println!("cargo:rerun-if-changed={manifest_dir}/../../Dioxus.toml");
+    println!(
+        "cargo:rerun-if-changed={}/scripts/gen_licenses.py",
+        workspace.display()
+    );
+    println!(
+        "cargo:rerun-if-changed={}/scripts/licenses",
+        workspace.display()
+    );
+    println!("cargo:rerun-if-changed={}/about.toml", workspace.display());
+
+    let script = workspace.join("scripts/gen_licenses.py");
+    let exit = std::process::Command::new("python3")
+        .arg(&script)
+        .current_dir(workspace)
+        .status()
+        .unwrap_or_else(|e| unreachable!("执行 {} 失败: {e}", script.display()));
+    assert!(
+        exit.success(),
+        "开源许可扫描未通过（见上方输出）：修复许可兼容性或重新生成清单后重试"
+    );
 }
 
 fn declare_rerun_deps(manifest_dir: &str, ts_dir: &str) {

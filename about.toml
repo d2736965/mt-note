@@ -1,0 +1,25 @@
+# cargo-about 配置：扫描移动端依赖的开源许可并做兼容性门禁。
+# 生成：scripts/gen_licenses.py（内部调用 cargo about generate --format json）。
+# 依赖变化后重新运行脚本即可；产物 third_party.json 已提交，构建不依赖 cargo-about。
+
+# 只统计 Android 目标实际编译的依赖（移动端 APK 就是他）
+targets = ["aarch64-linux-android"]
+
+# 许可兼容性门禁：全部依赖的 SPDX 标识白名单（宽松许可）。
+# 出现白名单外的许可时 cargo-about 直接报错退出，脚本随之失败——
+# 引入不兼容依赖在此处被拦下。
+accepted = [
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "CC0-1.0",
+    "CDLA-Permissive-2.0",
+    "ISC",
+    "MIT",
+    "MPL-2.0",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "Zlib",
+    "bzip2-1.0.6",
+]
