@@ -1,0 +1,140 @@
+.licenses_view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: $md-space-md;
+  gap: $md-space-md;
+  overflow-y: auto;
+
+  .hint {
+    color: var(--md-on-surface-variant);
+    font-size: $md-font-body-md;
+    text-align: center;
+    padding: $md-space-lg 0;
+  }
+
+  .entry_list {
+    display: flex;
+    flex-direction: column;
+    gap: $md-space-xs;
+    font-size: $md-font-body-sm;
+    color: var(--md-on-surface-variant);
+
+    .entry {
+      display: flex;
+      align-items: center;
+      gap: $md-space-sm;
+      width: 100%;
+      padding: $md-space-sm $md-space-md;
+      border: none;
+      border-radius: $md-radius-md;
+      background: var(--md-surface-container);
+      text-align: left;
+      cursor: pointer;
+
+      .entry_main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+
+        .entry_name {
+          font-size: $md-font-body-md;
+          color: var(--md-on-surface);
+          font-weight: 500;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .entry_license {
+          font-size: $md-font-body-sm;
+          color: var(--md-on-surface-variant);
+        }
+      }
+
+      .entry_version {
+        flex-shrink: 0;
+        font-size: $md-font-body-sm;
+        color: var(--md-on-surface-variant);
+      }
+
+      .entry_chevron {
+        flex-shrink: 0;
+        color: var(--md-on-surface-variant);
+      }
+    }
+  }
+
+  .detail {
+    display: flex;
+    flex-direction: column;
+    gap: $md-space-md;
+
+    .detail_header {
+      display: flex;
+      align-items: baseline;
+      gap: $md-space-sm;
+      flex-wrap: wrap;
+
+      .detail_name {
+        font-size: $md-font-body-lg;
+        font-weight: 700;
+        color: var(--md-on-surface);
+      }
+
+      .detail_version {
+        font-size: $md-font-body-sm;
+        color: var(--md-on-surface-variant);
+      }
+
+      .detail_license {
+        font-size: $md-font-body-sm;
+        color: var(--md-on-surface-variant);
+        background: var(--md-surface-container);
+        border-radius: $md-radius-full;
+        padding: 2px $md-space-sm;
+      }
+    }
+
+    .repo_row {
+      display: flex;
+      align-items: center;
+      gap: $md-space-sm;
+      width: 100%;
+      padding: $md-space-sm $md-space-md;
+      border: none;
+      border-radius: $md-radius-md;
+      background: var(--md-surface-container);
+      text-align: left;
+      cursor: pointer;
+
+      .repo_value {
+        flex: 1;
+        min-width: 0;
+        font-size: $md-font-body-sm;
+        color: var(--md-primary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .repo_chevron {
+        flex-shrink: 0;
+        color: var(--md-on-surface-variant);
+      }
+    }
+
+    .license_text {
+      margin: 0;
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: $md-font-body-sm;
+      line-height: 1.5;
+      color: var(--md-on-surface);
+      white-space: pre-wrap;
+      word-break: break-word;
+      user-select: text;
+    }
+  }
+}

@@ -195,6 +195,21 @@ class MainActivity : WryActivity() {
         }
     }
 
+    // 用系统浏览器打开网页链接（如关于页的仓库地址；由 Rust 侧通过 JNI 调用）
+    @Keep
+    fun openUrl(url: String) {
+        runOnUiThread {
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                startActivity(intent)
+            } catch (e: Exception) {
+                Log.e(TAG, "openUrl failed: $url", e)
+            }
+        }
+    }
+
     // 外部应用再次分享文件时（app 已在运行），通过此方法接收新 Intent
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)

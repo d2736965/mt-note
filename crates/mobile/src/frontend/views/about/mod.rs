@@ -1,14 +1,19 @@
+use dioxus::logger::tracing;
 use dioxus::prelude::*;
 use dioxus_i18n::prelude::i18n;
 use ui::components::icons::ChevronRightIcon;
 
 use crate::frontend::hooks::use_top_app_bar_state::use_top_app_bar_state;
 use crate::frontend::i18n as i18n_support;
+use crate::frontend::store::storage::jni;
 use crate::frontend::store::top_app_bar_state::MenuItem;
 
 stylance::import_style!(about_styles, "about.module.scss");
 
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+/// 源码仓库地址（关于页展示简称，点按经原生浏览器打开完整 URL）。
+const REPO_URL: &str = "https://github.com/d2736965/mt-note";
+const REPO_URL_SHORT: &str = "github.com/d2736965/mt-note";
 
 #[component]
 pub fn About() -> Element {
@@ -37,14 +42,25 @@ pub fn About() -> Element {
                 button {
                     class: about_styles::license_row,
                     onclick: move |_| {
-                        nav.push("/license");
+                        // 无浏览器等异常由原生层捕获记日志，这里只需感知失败
+                        if let Err(e) = jni::open_url(REPO_URL) {
+                            tracing::error!("open_url({REPO_URL}): {e}");
+                        }
                     },
-                    span { class: about_styles::license_label, { i18n_support::translate(&i18n_ctx, "common-license") } }
-                    span { class: about_styles::license_value, "MIT OR Apache-2.0" }
+                    span { class: about_styles::license_label, { i18n_support::translate(&i18n_ctx, "about-repo") } }
+                    span { class: about_styles::license_value, "{REPO_URL_SHORT}" }
+                    ChevronRightIcon { class: about_styles::license_chevron }
+                }
+                button {
+                    class: about_styles::license_row,
+                    onclick: move |_| {
+                        nav.push("/licenses");
+                    },
+                    span { class: about_styles::license_label, { i18n_support::translate(&i18n_ctx, "about-oss-licenses") } }
                     ChevronRightIcon { class: about_styles::license_chevron }
                 }
             }
-            p { class: about_styles::footer, "© 2026 d2736965" }
+            p { class: about_styles::footer, "© The MtNote Project Contributors" }
         }
     }
 }

@@ -157,6 +157,32 @@ pub fn open_with_external_app(_path: &str) -> Result<(), JniError> {
     Ok(())
 }
 
+/// 用系统浏览器打开网页链接（如关于页的仓库地址）。
+///
+/// 以 instance method 调用 `MainActivity.openUrl(url)`，原生层构造
+/// `Intent.ACTION_VIEW` 跳转；无浏览器等异常由 Kotlin 侧捕获，仅记日志。
+#[cfg(target_os = "android")]
+pub fn open_url(url: &str) -> Result<(), JniError> {
+    let ctx = ndk_context::android_context();
+    let vm = unsafe { jni::JavaVM::from_raw(ctx.vm().cast()) };
+    vm.attach_current_thread::<_, _, JniError>(|env| {
+        let activity = unsafe { jni::objects::JObject::from_raw(env, ctx.context().cast()) };
+        let jstr = env.new_string(url)?;
+        env.call_method(
+            &activity,
+            jni::strings::JNIString::from("openUrl"),
+            jni::jni_sig!("(Ljava/lang/String;)V"),
+            &[jni::objects::JValue::Object(&jstr.into())],
+        )?;
+        Ok(())
+    })
+}
+
+#[cfg(not(target_os = "android"))]
+pub fn open_url(_url: &str) -> Result<(), JniError> {
+    Ok(())
+}
+
 /// 读取系统语言标签（BCP-47，如 "zh-CN"），用于默认界面语言解析。
 ///
 /// 通过 `ndk_context` 获取 Activity 实例，以 instance method 调用
