@@ -26,12 +26,13 @@
     text-align: center;
   }
 
+  // 行式条目（VLC 式）：无卡片底色，直接躺在页面上，按压出涟漪
   .license_section {
     width: 100%;
     max-width: 320px;
-    background: var(--md-surface-container);
-    border-radius: $md-radius-lg;
-    padding: $md-space-xs $md-space-sm;
+    display: flex;
+    flex-direction: column;
+    gap: $md-space-xs;
 
     .row {
       display: flex;
@@ -42,7 +43,7 @@
       min-height: 48px;
       padding: $md-space-sm $md-space-md;
       border: none;
-      border-radius: $md-radius-md;
+      border-radius: $md-radius-full;
       background: transparent;
       font-size: $md-font-body-md;
       text-align: center;
@@ -62,12 +63,6 @@
         color: var(--md-on-surface);
         font-weight: 500;
       }
-    }
-
-    .divider {
-      height: 1px;
-      margin: 2px $md-space-md;
-      background: var(--md-outline-variant);
     }
   }
 

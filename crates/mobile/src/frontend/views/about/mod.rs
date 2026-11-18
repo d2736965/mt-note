@@ -49,7 +49,6 @@ pub fn About() -> Element {
                     CodeIcon { class: about_styles::row_icon }
                     span { class: about_styles::row_label, { i18n_support::translate(&i18n_ctx, "about-source-code") } }
                 }
-                div { class: about_styles::divider }
                 button {
                     class: about_styles::row,
                     onclick: move |_| {
