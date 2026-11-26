@@ -4,11 +4,14 @@
 签名成品输出到 tmp/apk/mt-note-v<版本>.apk（版本取自工作区根 Cargo.toml
 的 [workspace.package] version，与关于页/安卓 versionName 同源）。
 
-用法:
-    python scripts/build_release_apk.py -p <password> -k <keystore路径> -a <alias>           # 构建 + 签名
-    python scripts/build_release_apk.py -p <password> -k <keystore路径> -a <alias> --sign-only <apk>  # 仅签名
+密码交互输入（getpass，不回显），不落命令行/历史/进程参数表：
+    python scripts/build_release_apk.py -k <keystore路径>            # 构建 + 签名
+    python scripts/build_release_apk.py -k <keystore路径> --sign-only <apk>  # 仅签名
+alias 缺省时由 apksigner 自动选用 keystore 中唯一的 key（多条目则须 -a 显式指定）。
+也可用 -p/-a 非交互传参（密码会进命令行，不推荐）。
 """
 import argparse
+import getpass
 import glob
 import os
 import shutil
@@ -73,14 +76,14 @@ def find_apksigner() -> str:
     sys.exit("✗ 未找到 apksigner：PATH 上没有，且 $ANDROID_HOME/build-tools/*/ 下也没有")
 
 
-def sign_apk(apk: Path, keystore: Path, alias: str, password: str) -> Path:
+def sign_apk(apk: Path, keystore: Path, alias: str | None, password: str) -> Path:
     apksigner = find_apksigner()
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     output = OUTPUT_DIR / f"mt-note-v{read_version()}.apk"
 
     print(f"• keystore: {keystore}")
-    print(f"• alias:    {alias}")
+    print(f"• alias:    {alias or '(自动选用 keystore 唯一 key)'}")
     print(f"• 输入 APK: {apk}")
     print(f"• 输出 APK: {output}")
 
@@ -88,12 +91,13 @@ def sign_apk(apk: Path, keystore: Path, alias: str, password: str) -> Path:
         apksigner,
         "sign",
         "--ks", str(keystore),
-        "--ks-key-alias", alias,
         "--ks-pass", f"pass:{password}",
         "--key-pass", f"pass:{password}",
         "--out", str(output),
         str(apk),
     ]
+    if alias:
+        cmd[3:3] = ["--ks-key-alias", alias]
     result = subprocess.run(cmd)
     if result.returncode == 0:
         print(f"✓ 签名完成: {output}")
@@ -107,13 +111,13 @@ def main() -> None:
         description="构建并签名 mt-note release APK"
     )
     parser.add_argument(
-        "-p", "--password", required=True, help="keystore 与 key 密码（假设相同）"
+        "-p", "--password", default=None, help="keystore 与 key 密码（缺省交互输入，不回显）"
     )
     parser.add_argument(
         "-k", "--ks", required=True, help="keystore 路径"
     )
     parser.add_argument(
-        "-a", "--alias", required=True, help="key alias"
+        "-a", "--alias", default=None, help="key alias（keystore 仅一个 key 时可省略）"
     )
     parser.add_argument(
         "--sign-only",
@@ -128,13 +132,16 @@ def main() -> None:
     if not keystore.is_file():
         sys.exit(f"✗ keystore 不存在: {keystore}")
 
+    # 密码提示前置到构建前：启动即输入，输完构建自动进行，无需守候
+    password = args.password or getpass.getpass("keystore 密码: ")
+
     if args.sign_only is not None:
         apk = find_apk(args.sign_only if args.sign_only else None)
-        sign_apk(apk, keystore, args.alias, args.password)
+        sign_apk(apk, keystore, args.alias, password)
     else:
         build_release()
         apk = find_apk(None)
-        sign_apk(apk, keystore, args.alias, args.password)
+        sign_apk(apk, keystore, args.alias, password)
 
 
 if __name__ == "__main__":
