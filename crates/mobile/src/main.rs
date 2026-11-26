@@ -52,7 +52,14 @@ fn main() {
     // 因为 hook 内用 tracing::error! 输出，subscriber 未初始化时日志会丢失。
     panic_hook::install();
 
-    dioxus::launch(app);
+    // 显式关闭 context menu 禁用：dioxus-desktop 在 release 下默认
+    // disable_context_menu = !cfg!(debug_assertions)，会注入
+    // `contextmenu -> preventDefault` 初始化脚本，吞掉长按事件，
+    // WebView 的长按上下文菜单（选择/复制）因此不弹，任何平台一样。
+    // Config 经 LaunchConfig 传入后由 launch 路径 downcast 使用。
+    dioxus::LaunchBuilder::new()
+        .with_cfg(dioxus::mobile::Config::new().with_disable_context_menu(false))
+        .launch(app);
 }
 
 /// 根组件，挂载路由器。`App` 由 `#[layout(App)]` 标记为布局组件，
