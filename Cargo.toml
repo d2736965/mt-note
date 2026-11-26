@@ -15,7 +15,7 @@ members = [
 # 应用版本唯一真源：mobile crate 继承此版本（安卓 versionName 与关于页
 # 版本号随构建自动对齐，改版本只改这里）
 [workspace.package]
-version = "1.0.0"
+version = "1.0.1"
 
 [workspace.dependencies]
 ui = { path = "crates/ui" }
